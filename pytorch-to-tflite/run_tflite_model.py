@@ -21,4 +21,4 @@ interpreter.invoke()
 # use tensor() in order to get a pointer to the tensor
 output_data = interpreter.get_tensor(output_details[0]['index'])
 print(f"Output - {output_data}")
-print(f"Shape - {output_data.shape}")
+print(f"Output Shape - {output_data.shape}")
