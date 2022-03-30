@@ -23,8 +23,6 @@ class AnnUpsampler:
         input_signal, output_signal, self.labels = read_freq_data(config["folder_path"])
         full_dataset = SignalDataset(input_signal, output_signal, self.labels, transforms.ToTensor())
         train_set, val_set, test_set = random_split(full_dataset, [650, 194, 195])
-        print(train_set[0])
-        exit()
 
         # Data Loaders
         self.train_loader = DataLoader(train_set, shuffle=True, batch_size = config["batch_size"])
