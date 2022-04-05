@@ -1,5 +1,5 @@
 {
-    "folder_path": "/Users/ganesh/UofA/SNN/freq_data",
+    "folder_path": "/content/drive/MyDrive/SNN_project/ANN Upsampling Project Data",
     "lr": 0.5,
     "weight_decay": 5e-5,
     "epochs": 2000,
