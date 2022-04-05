@@ -15,7 +15,7 @@ def regressor_network_siren(data_shape):
     regressor1.add(SinusodialRepresentationDense(25, kernel_initializer='he_uniform',activation=tf.math.sin))
     regressor1.add(Dropout(0.1))
     regressor1.add(Dense(1, kernel_initializer='he_uniform',activation='linear'))
-
+    return regressor1
 
 def regressor_network(data_shape):
     regressor1 = Sequential()
@@ -24,3 +24,4 @@ def regressor_network(data_shape):
     regressor1.add(Dense(25, kernel_initializer='he_uniform',activation=tf.math.sin))
     regressor1.add(Dropout(0.1))
     regressor1.add(Dense(1, kernel_initializer='he_uniform',activation='linear'))
+    return regressor1

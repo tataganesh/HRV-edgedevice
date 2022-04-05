@@ -14,6 +14,7 @@ from networks.net import NeuralNetwork
 import matplotlib.pyplot as plt
 from joblib import dump
 from datetime import datetime
+from micromlgen import port
 today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
 
 
@@ -43,12 +44,17 @@ print(f"Test Normal Signals - {np.sum(test_labels==0)}")
 print(f"Test Abnormal Signals - {np.sum(test_labels==1)}")
 
 if args.method == "svm":
-    clf = SVC()
+    clf = SVC(gamma=1.0/(train_input.shape[1] * train_input.var()))
+    print(1.0/(train_input.shape[1] * train_input.var()))
     clf.fit(train_input, train_labels)
 
 # Save Model
 dump(clf, os.path.join(args.save_path, f'{args.method}_classifier_{today}.joblib'))
 
+# Save plain C version
+with open(os.path.join(args.save_path, 'svm_classifier.h'), 'w') as f:
+    f.write(port(clf))
+    
 # Report test accuracy and display confusion matrix
 print("Test Accuracy")
 print((clf.predict(test_input) == test_labels).mean())
