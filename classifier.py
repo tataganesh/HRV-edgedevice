@@ -10,7 +10,7 @@ from data_utils import SignalDataset, read_freq_data
 from torch.utils.data import random_split
 import torchvision.transforms as transforms
 import argparse
-from net import NeuralNetwork
+from networks.net import NeuralNetwork
 import matplotlib.pyplot as plt
 from joblib import dump
 from datetime import datetime

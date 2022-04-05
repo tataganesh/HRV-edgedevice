@@ -1,7 +1,7 @@
 import torch
 import sys
 sys.path.append('../')
-from net import NeuralNetwork
+from networks.net import NeuralNetwork
 import argparse
 
 parser = argparse.ArgumentParser(description='ANN Upsampler Training')

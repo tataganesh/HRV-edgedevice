@@ -4,5 +4,7 @@
     "weight_decay": 5e-5,
     "epochs": 2000,
     "batch_size": 32,
-    "save_path": "models"
+    "save_path": "models",
+    "upsampler_path": "models/upsampler_2022-04-05-00:03:17.pt",
+    "hrv_data": "data/hrv_gt_12hz_hearpy.csv"
 }

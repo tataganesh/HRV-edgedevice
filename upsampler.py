@@ -1,6 +1,6 @@
 import torch
 from data_utils import read_freq_data, SignalDataset
-
+import numpy as np
 import torch
 import pandas as pd
 import torch.nn as nn
@@ -12,7 +12,7 @@ import json
 import argparse
 import os
 from datetime import datetime
-from net import NeuralNetwork
+from networks.net import NeuralNetwork
 today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
 
 
@@ -22,12 +22,14 @@ class AnnUpsampler:
         torch.manual_seed(1)
         input_signal, output_signal, self.labels = read_freq_data(config["folder_path"])
         full_dataset = SignalDataset(input_signal, output_signal, self.labels, transforms.ToTensor())
-        train_set, val_set, test_set = random_split(full_dataset, [650, 194, 195])
-
+        self.train_set, self.val_set, self.test_set = random_split(full_dataset, [650, 194, 195])
+        # torch.save(np.array(self.train_set.indices), "data/train_set_indices.npy")
+        # torch.save(np.array(self.val_set.indices), "data/val_set.npy")
+        # torch.save(np.array(self.test_set.indices), "data/test_set.npy")
         # Data Loaders
-        self.train_loader = DataLoader(train_set, shuffle=True, batch_size = config["batch_size"])
-        self.val_loader = DataLoader(val_set, shuffle=True, batch_size = config["batch_size"])
-        self.test_loader = DataLoader(test_set, batch_size = len(test_set))
+        self.train_loader = DataLoader(self.train_set, shuffle=True, batch_size = config["batch_size"])
+        self.val_loader = DataLoader(self.val_set, shuffle=True, batch_size = config["batch_size"])
+        self.test_loader = DataLoader(self.test_set, batch_size = len(self.test_set))
 
         # Loss Functiin
         self.loss_func = torch.nn.MSELoss()
@@ -39,7 +41,7 @@ class AnnUpsampler:
     def train(self):
         for epoch in range(0, self.epochs):
             train_loss = 0.0
-            for inp, op, labels in self.train_loader:
+            for inp, op, label in self.train_set:
                 self.optimizer.zero_grad()
                 pred = self.ann_upsampler(inp.float())
                 loss = self.loss_func(pred, op.float())
@@ -64,6 +66,25 @@ class AnnUpsampler:
                 pred = self.ann_upsampler(test_inp.float())
                 mse = self.loss_func(pred, test_op.float())
             print(f"Test MSE - {mse}")
+    
+    def upsample_and_save(self, model=None):
+        if model is None:
+            model = self.ann_upsampler
+        train_upsampled_signals = list()
+        val_upsampled_signals = list()
+        test_upsampled_signals = list()
+        with torch.no_grad():
+            train_upsampled_signals = np.array([model(inp.float()).numpy() for inp, _, _ in self.train_set])
+            val_upsampled_signals =  np.array([model(inp.float()).numpy() for inp, _, _ in self.val_set])
+            test_upsampled_signals =  np.array([model(inp.float()).numpy() for inp, _, _ in self.test_set])
+            np.save("data/upsampled_signals_train.npy", train_upsampled_signals)
+            np.save("data/upsampled_signals_val.npy", val_upsampled_signals)
+            np.save("data/upsampled_signals_test.npy", test_upsampled_signals)
+        for inp, op, _ in self.test_loader:
+                mse = self.loss_func(torch.from_numpy(test_upsampled_signals), op.float())
+                print(f"Test MSE - {mse}")
+            
+            
 
 if __name__ == "__main__":
 
@@ -72,5 +93,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     config=json.load(open(args.config, 'r'))
     trainer =  AnnUpsampler(config=config)
-    trainer.train()
-    trainer.test()
+    # trainer.train()
+    # trainer.test()
+    trainer.upsample_and_save(torch.load("models/upsampler_2022-04-05-00:03:17.pt"))
