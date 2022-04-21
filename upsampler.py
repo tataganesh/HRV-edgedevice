@@ -95,4 +95,4 @@ if __name__ == "__main__":
     trainer =  AnnUpsampler(config=config)
     # trainer.train()
     # trainer.test()
-    trainer.upsample_and_save(torch.load("models/upsampler_2022-04-05-00:03:17.pt"))
+    trainer.upsample_and_save(torch.load("models/upsampler_2022_04_20.pt"))
