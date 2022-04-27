@@ -20,7 +20,7 @@ today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
 class AnnUpsampler:
     def __init__(self, config=None):
         torch.manual_seed(1)
-        input_signal, output_signal, self.labels = read_freq_data(config["folder_path"])
+        input_signal, output_signal, self.labels = read_freq_data(config["folder_path"], config["signal_percentage"])
         full_dataset = SignalDataset(input_signal, output_signal, self.labels, transforms.ToTensor())
         self.train_set, self.val_set, self.test_set = random_split(full_dataset, [650, 194, 195])
         # torch.save(np.array(self.train_set.indices), "data/train_set_indices.npy")
@@ -33,15 +33,26 @@ class AnnUpsampler:
 
         # Loss Functiin
         self.loss_func = torch.nn.MSELoss()
-        self.ann_upsampler = NeuralNetwork(input_signal.shape[1], output_signal.shape[1])
+        self.ann_upsampler = NeuralNetwork(input_signal.shape[1], output_signal.shape[1], config["layer_sizes"])
+        print(self.ann_upsampler)
         self.optimizer = optim.SGD(self.ann_upsampler.parameters(), lr=config["lr"], weight_decay=config["weight_decay"])
         self.epochs = config["epochs"]
         self.save_path = config["save_path"]
 
+    def accuracy(self, loader):
+        acc = 0.0
+        with torch.no_grad():
+            for inp, op, labels in loader:
+                pred = self.ann_upsampler(inp.float())
+                loss = self.loss_func(pred, op.float())
+                acc += loss.item()
+        return acc/len(loader)
+        
+
     def train(self):
         for epoch in range(0, self.epochs):
             train_loss = 0.0
-            for inp, op, label in self.train_set:
+            for inp, op, label in self.train_loader:
                 self.optimizer.zero_grad()
                 pred = self.ann_upsampler(inp.float())
                 loss = self.loss_func(pred, op.float())
@@ -49,16 +60,12 @@ class AnnUpsampler:
                 self.optimizer.step()
                 train_loss += loss.item()
             val_loss = 0.0
-            with torch.no_grad():
-                for inp, op, labels in self.val_loader:
-                    pred = self.ann_upsampler(inp.float())
-                    loss = self.loss_func(pred, op.float())
-                    val_loss += loss.item()
+
             if not epoch % 100:
-                print(f"Epoch - {epoch}, train loss - {train_loss/len(self.train_loader)*1.0:.5f}, val loss - {val_loss/len(self.val_loader)*1.0:.5f}")
-
-
-        torch.save(self.ann_upsampler, os.path.join(self.save_path, f"upsampler_{today}.pt"))
+                print(f"Epoch - {epoch}, train loss - {train_loss/len(self.train_loader)*1.0:.5f}, Train accuracy - {self.accuracy(self.train_loader)*1.0:.5f}, val accuracy - {self.accuracy(self.val_loader)*1.0:.5f}")
+            
+        with torch.no_grad():
+            torch.save(self.ann_upsampler, os.path.join(self.save_path, f"upsampler_{today}.pt"))
         
     def test(self):
         with torch.no_grad():
@@ -93,6 +100,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     config=json.load(open(args.config, 'r'))
     trainer =  AnnUpsampler(config=config)
-    # trainer.train()
-    # trainer.test()
-    trainer.upsample_and_save(torch.load("models/upsampler_2022-04-05-00:03:17.pt"))
+    trainer.train()
+    trainer.test()
+    # trainer.upsample_and_save(torch.load("models/upsampler_2022-04-05-00:03:17.pt"))

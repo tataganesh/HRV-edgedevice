@@ -7,7 +7,7 @@ import torch
 
 
 
-def read_freq_data(folder_path):
+def read_freq_data(folder_path, signal_percentage=1):
     sixhzsignal = pd.DataFrame({})
     twelvehzsignal = pd.DataFrame({})
     labels = list()
@@ -37,7 +37,9 @@ def read_freq_data(folder_path):
         labels.extend([0] * sixhz_normal.shape[0])
 
     input_signal = sixhzsignal.to_numpy()
+    input_signal = input_signal[:, :int(input_signal.shape[1] * signal_percentage)]
     output_signal = twelvehzsignal.to_numpy()
+    output_signal = output_signal[:, :int(output_signal.shape[1] * signal_percentage)]
     labels = np.array(labels)
     print(f"Normal Signals - {np.sum(labels==0)}")
     print(f"Abnormal Signals - {np.sum(labels==1)}")
