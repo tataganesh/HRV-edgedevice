@@ -1,0 +1,13 @@
+{
+    "folder_path": "/content/drive/MyDrive/SNN_project/ANN Upsampling Project Data",
+    "lr": 0.5,
+    "weight_decay": 5e-5,
+    "epochs": 2000,
+    "batch_size": 32,
+    "save_path": "models/regressor",
+    "upsampler_path": "/content/hrv-edgedevice/models/upsampler/2022-05-02-15:30:34/upsampler_2022-05-02-15:30:34.pt",
+    "hrv_data": "data/hrv_gt_12hz_hearpy.csv",
+    "signal_percentage": 1,
+    "layer_sizes": [53, 25],
+    "siren_arch": false
+}

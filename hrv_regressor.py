@@ -16,7 +16,7 @@ today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
 #HRV Regressor model
 
 class HrvRegressor:
-    def __init__(self, config_path, signal_type="original", model_type="siren"):
+    def __init__(self, config_path, signal_type="original"):
         # load data
         config=json.load(open(config_path, 'r'))
         self.config_path = config_path
@@ -41,7 +41,7 @@ class HrvRegressor:
         self.train_input, self.train_labels = get_input(train_set), get_label(train_set)
         self.val_input, self.val_labels = get_input(val_set), get_label(val_set)
         self.test_input, self.test_labels = get_input(test_set), get_label(test_set)
-        self.regressor_net = regressor.regressor_network_siren(output_signal.shape) if model_type=="siren" else  regressor.regressor_network(output_signal.shape)
+        self.regressor_net = regressor.regressor_network_siren(output_signal.shape) if config["siren_arch"] == True else  regressor.regressor_network(output_signal.shape)
         self.regressor_net.compile(loss=tf.keras.losses.MeanSquaredError(), optimizer='adam',metrics=['mae','mse','mape'])
         print(self.regressor_net.summary())
     def train(self):
@@ -58,8 +58,9 @@ class HrvRegressor:
         # keras_model_config = self.regressor_net.get_config()
         # with open(os.path.join(model_info_path, "keras_config.json"), 'r') as f:
         #     json.dump(keras_model_config, f)
-        self.regressor_net.save_weights(os.path.join(model_info_path, 'HRV_regressor_weights_only_{today}.h5'))
-        
+        self.regressor_net.save_weights(os.path.join(model_info_path, f'HRV_regressor_{today}.h5'))
+        shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
+    
     def load_model(self, model_weights_path):
         self.regressor_net.load_weights(model_weights_path)
     
@@ -72,12 +73,3 @@ if __name__ == "__main__":
     args = parser.parse_args()
     trainer =  HrvRegressor(config_path=args.config, signal_type=args.signal_type)
     trainer.train()
-    
-
-
-
-
-
-
-
-

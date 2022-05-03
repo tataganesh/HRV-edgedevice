@@ -8,5 +8,6 @@
     "upsampler_path": "models/upsampler_2022-04-05-00:03:17.pt",
     "hrv_data": "data/hrv_gt_12hz_hearpy.csv",
     "signal_percentage": 0.5,
-    "layer_sizes": [60]
+    "layer_sizes": [60],
+    "siren_arch": true
 }
