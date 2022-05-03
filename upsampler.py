@@ -13,13 +13,16 @@ import argparse
 import os
 from datetime import datetime
 from networks.net import NeuralNetwork
+import shutil
 today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
 
 
 
 class AnnUpsampler:
-    def __init__(self, config=None):
+    def __init__(self, config_path=None):
         torch.manual_seed(1)
+        self.config_path = config_path
+        config=json.load(open(config_path, 'r'))
         input_signal, output_signal, self.labels = read_freq_data(config["folder_path"], config["signal_percentage"])
         full_dataset = SignalDataset(input_signal, output_signal, self.labels, transforms.ToTensor())
         self.train_set, self.val_set, self.test_set = random_split(full_dataset, [650, 194, 195])
@@ -65,7 +68,12 @@ class AnnUpsampler:
                 print(f"Epoch - {epoch}, train loss - {train_loss/len(self.train_loader)*1.0:.5f}, Train accuracy - {self.accuracy(self.train_loader)*1.0:.5f}, val accuracy - {self.accuracy(self.val_loader)*1.0:.5f}")
             
         with torch.no_grad():
-            torch.save(self.ann_upsampler, os.path.join(self.save_path, f"upsampler_{today}.pt"))
+            model_info_path = os.path.join(self.save_path, str(today))
+            if os.path.exists(model_info_path):
+                shutil.rmtree(model_info_path)
+            os.makedirs(model_info_path)
+            torch.save(self.ann_upsampler, os.path.join(model_info_path, f"upsampler_{today}.pt"))
+            shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
         
     def test(self):
         with torch.no_grad():
@@ -98,8 +106,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='ANN Upsampler Training')
     parser.add_argument('--config', help="path to config with training params", required=True)
     args = parser.parse_args()
-    config=json.load(open(args.config, 'r'))
-    trainer =  AnnUpsampler(config=config)
+    trainer =  AnnUpsampler(config_path=args.config)
     trainer.train()
     trainer.test()
     # trainer.upsample_and_save(torch.load("models/upsampler_2022-04-05-00:03:17.pt"))
