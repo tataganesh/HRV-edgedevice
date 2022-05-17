@@ -1,7 +1,7 @@
 import numpy as np
-from sklearn.svm import SVC
+from sklearn.svm import SVC, NuSVC
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, f1_score
 from sklearn.neural_network import MLPClassifier
 import torch
 import torch.nn as nn
@@ -26,7 +26,7 @@ parser.add_argument('--save_path', help="Save Path for classifier", default="mod
 
 args = parser.parse_args()
 torch.manual_seed(1)
-input_signal, output_signal, labels = read_freq_data(args.folder_path)
+input_signal, output_signal, labels = read_freq_data(args.folder_path, 0.5) # The percentage argument needs to be provided via config
 full_dataset = SignalDataset(input_signal, output_signal, labels, transforms.ToTensor())
 train_set, val_set, test_set = random_split(full_dataset, [650, 194, 195])
 ann_upsampler = torch.load(args.upsampler)
@@ -44,20 +44,25 @@ print(f"Test Normal Signals - {np.sum(test_labels==0)}")
 print(f"Test Abnormal Signals - {np.sum(test_labels==1)}")
 
 if args.method == "svm":
-    clf = SVC(gamma=1.0/(train_input.shape[1] * train_input.var()))
+    clf = SVC(gamma=1.0/(train_input.shape[1] * train_input.var()), class_weight='balanced')
     print(1.0/(train_input.shape[1] * train_input.var()))
     clf.fit(train_input, train_labels)
-
+elif args.method == "lr":
+    clf = LogisticRegression(C=0.1, class_weight='balanced')
+    # print(1.0/(train_input.shape[1] * train_input.var()))
+    clf.fit(train_input, train_labels)
+# exit()
 # Save Model
-dump(clf, os.path.join(args.save_path, f'{args.method}_classifier_{today}.joblib'))
+# dump(clf, os.path.join(args.save_path, f'{args.method}_classifier_{today}.joblib'), compress=7)
 
 # Save plain C version
-with open(os.path.join(args.save_path, 'svm_classifier.h'), 'w') as f:
+with open(os.path.join(args.save_path, 'logisticregression_classifier.h'), 'w') as f:
     f.write(port(clf))
     
 # Report test accuracy and display confusion matrix
 print("Test Accuracy")
 print((clf.predict(test_input) == test_labels).mean())
+print(f1_score(test_labels, clf.predict(test_input)))
 cm = confusion_matrix(test_labels, clf.predict(test_input))
 
 disp = ConfusionMatrixDisplay(confusion_matrix=cm,

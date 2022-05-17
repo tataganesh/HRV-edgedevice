@@ -2,6 +2,7 @@ import torch
 import sys
 sys.path.append('../')
 from networks.net import NeuralNetwork
+from networks.classifier_circular import CirConvNet, CirConvNetStacked
 import argparse
 
 parser = argparse.ArgumentParser(description='ANN Upsampler Training')
