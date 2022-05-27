@@ -1,6 +1,6 @@
 {
     "folder_path": "/Users/ganesh/UofA/SNN/freq_data",
-    "lr": 0.01,
+    "lr": 0.5,
     "weight_decay": 0,
     "epochs": 2000,
     "batch_size": 32,
@@ -8,7 +8,7 @@
     "upsampler_path": "/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-05-02-15:33:35/upsampler_2022-05-02-15:33:35.pt",
     "hrv_data": "data/hrv_gt_12hz_hearpy.csv",
     "signal_percentage": 0.5,
-    "layer_sizes": [56, 56, 28, 28],
+    "layer_sizes": [57, 57, 57, 57, 57, 57, 57, 57, 57, 57],
     "siren_arch": true,
     "dropout": 0
 }

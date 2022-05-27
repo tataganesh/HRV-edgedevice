@@ -79,7 +79,7 @@ class AnomalyClassifier:
         else:
             self.loss_func = torch.nn.BCEWithLogitsLoss()
         if config["conv2d"]:
-            self.classifier = classifier_circular.CirConvNetStacked2d(config["layer_sizes"])
+            self.classifier = classifier_circular.CirConvNet(config["layer_sizes"])
         else:
             self.classifier = classifier_circular.CirConvNetStacked1d(config["layer_sizes"])
         summary(self.classifier, (1, 56), device='cpu')

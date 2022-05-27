@@ -43,7 +43,7 @@ class HrvRegressor:
         self.train_input, self.train_labels = get_input(train_split), get_label(train_split)
         self.train_set = list(zip(self.train_input, self.train_labels))
         self.val_input, self.val_labels = get_input(val_split), get_label(val_split)
-        
+        print(self.train_set[0], train_split.indices[0])
         self.val_set = list(zip(self.val_input, self.val_labels))
         self.test_input, self.test_labels = get_input(test_split), get_label(test_split)
         self.test_set = list(zip(self.test_input, self.test_labels))
@@ -59,7 +59,6 @@ class HrvRegressor:
         # for name, param in self.regressor.named_parameters():
         #     if param.requires_grad:
         #         print(name, param.shape)
-        print(list(self.regressor.parameters()))
         pytorch_total_params = sum(p.numel() for p in self.regressor.parameters() if p.requires_grad)
         print(pytorch_total_params)
         self.optimizer = optim.Adam(self.regressor.parameters(), lr=config["lr"], weight_decay=config["weight_decay"])
@@ -87,13 +86,13 @@ class HrvRegressor:
         for epoch in range(0, self.epochs):
             train_loss = 0.0
             for inp, label in self.train_loader:
+                # print(inp, label)
                 self.optimizer.zero_grad()
                 pred = self.regressor(inp.float())
                 l1_regularization = 0
                 for param in self.regressor.parameters():
                         l1_regularization += param.abs().sum()
                 loss = self.loss_func(pred, label.float()) # + 0.5*l1_regularization
-                l1_regularization = 0.
 
                 loss.backward()
                 self.optimizer.step()

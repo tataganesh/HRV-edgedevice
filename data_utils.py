@@ -14,10 +14,10 @@ def read_freq_data(folder_path, signal_percentage=1):
 
     # folder_path = "/content/drive/MyDrive/SNN_project/ANN Upsampling Project Data"
     for i in range(1, 4):
-        twelvehz_normal = pd.read_csv(os.path.join(folder_path, f"6hznormal{i}.csv")).transpose()
-        sixhz_normal = pd.read_csv(os.path.join(folder_path, f"12hznormal{i}.csv")).transpose()
-        twelvehz_abnormal = pd.read_csv(os.path.join(folder_path, f"6hzabnormal{i}.csv")).transpose()
-        sixhz_abnormal = pd.read_csv(os.path.join(folder_path, f"12hzabnormal{i}.csv")).transpose()
+        twelvehz_normal = pd.read_csv(os.path.join(folder_path, f"6hznormal{i}.csv"), header=None).transpose()
+        sixhz_normal = pd.read_csv(os.path.join(folder_path, f"12hznormal{i}.csv"), header=None).transpose()
+        twelvehz_abnormal = pd.read_csv(os.path.join(folder_path, f"6hzabnormal{i}.csv"), header=None).transpose()
+        sixhz_abnormal = pd.read_csv(os.path.join(folder_path, f"12hzabnormal{i}.csv"), header=None).transpose()
         print(twelvehz_normal.shape, sixhz_normal.shape, twelvehz_abnormal.shape, sixhz_abnormal.shape)
         if twelvehz_normal.shape[0] < sixhz_normal.shape[0]:
             sixhz_normal = sixhz_normal.iloc[0: twelvehz_normal.shape[0]]
@@ -33,8 +33,8 @@ def read_freq_data(folder_path, signal_percentage=1):
             twelvehz_abnormal = twelvehz_abnormal.iloc[0:0]
         sixhzsignal = pd.concat([sixhzsignal, sixhz_normal, sixhz_abnormal])
         twelvehzsignal = pd.concat([twelvehzsignal, twelvehz_normal, twelvehz_abnormal])
-        labels.extend([1] * sixhz_abnormal.shape[0])
         labels.extend([0] * sixhz_normal.shape[0])
+        labels.extend([1] * sixhz_abnormal.shape[0])
 
     input_signal = sixhzsignal.to_numpy()
     input_signal = input_signal[:, :int(input_signal.shape[1] * signal_percentage)]

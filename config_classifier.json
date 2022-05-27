@@ -5,10 +5,10 @@
     "epochs": 2000,
     "batch_size": 32,
     "save_path": "models/classifier",
-    "save_model": true, 
+    "save_model": false, 
     "upsampler_path": "/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-05-02-15:33:35/upsampler_2022-05-02-15:33:35.pt",
     "signal_percentage": 0.5,
-    "layer_sizes": [56, 56, 56, 56, 56, 56, 56, 56, 56, 56],
-    "pos_weight": true,
+    "layer_sizes": [56, 56, 56],
+    "pos_weight": false,
     "conv2d": false
 }

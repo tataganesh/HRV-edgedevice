@@ -5,6 +5,6 @@
     "epochs": 2000,
     "batch_size": 32,
     "save_path": "models/upsampler",
-    "signal_percentage": 0.5,
+    "signal_percentage": 1,
     "layer_sizes": [60]
 }
