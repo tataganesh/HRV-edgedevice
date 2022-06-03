@@ -1,0 +1,10 @@
+{
+    "folder_path": "/Users/ganesh/UofA/SNN/freq_data",
+    "lr": 0.5,
+    "weight_decay": 5e-5,
+    "epochs": 2000,
+    "batch_size": 32,
+    "save_path": "models/upsampler",
+    "signal_percentage": 0.5, 
+    "layer_sizes": [60]
+}
