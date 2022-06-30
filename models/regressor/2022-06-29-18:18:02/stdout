@@ -1,0 +1,57 @@
+Normal Signal  shape: (871, 35), (871, 69)
+Abnormal Signal shape: (86, 35), (86, 69)
+Normal Signals count- 871
+Abnormal Signals count- 86
+6Hz Signals shape - (957, 35)
+12Hz Signals shape - (957, 69)
+Labels - (957,)
+Train Set Size: 528
+Val Set Size: 528
+Test Set Size: 528
+Model Params: 466
+Epoch - 0, train loss - 68.86774, Train accuracy - 51.51755, val accuracy - 51.62885
+Epoch - 100, train loss - 4.02620, Train accuracy - 4.03242, val accuracy - 4.02932
+Epoch - 200, train loss - 2.98507, Train accuracy - 2.96838, val accuracy - 3.25612
+Epoch - 300, train loss - 2.78741, Train accuracy - 2.90914, val accuracy - 3.12974
+Epoch - 400, train loss - 2.72605, Train accuracy - 2.64987, val accuracy - 2.90832
+Epoch - 500, train loss - 2.79640, Train accuracy - 2.77727, val accuracy - 3.03696
+Epoch - 600, train loss - 2.69097, Train accuracy - 2.68773, val accuracy - 2.96032
+Epoch - 700, train loss - 2.81624, Train accuracy - 2.64402, val accuracy - 2.94785
+Epoch - 800, train loss - 2.80135, Train accuracy - 2.90923, val accuracy - 3.05142
+Epoch - 900, train loss - 2.66226, Train accuracy - 2.60202, val accuracy - 2.86889
+Epoch - 1000, train loss - 2.68092, Train accuracy - 2.66594, val accuracy - 2.87147
+Epoch - 1100, train loss - 2.63519, Train accuracy - 2.65029, val accuracy - 2.91666
+Epoch - 1200, train loss - 2.79424, Train accuracy - 2.72400, val accuracy - 3.00968
+Epoch - 1300, train loss - 2.63960, Train accuracy - 2.57691, val accuracy - 2.89566
+Epoch - 1400, train loss - 2.66133, Train accuracy - 2.61013, val accuracy - 2.90164
+Epoch - 1500, train loss - 2.63070, Train accuracy - 2.59335, val accuracy - 2.87617
+Epoch - 1600, train loss - 2.64029, Train accuracy - 2.58306, val accuracy - 2.84877
+Epoch - 1700, train loss - 2.64831, Train accuracy - 2.79852, val accuracy - 3.00376
+Epoch - 1800, train loss - 2.60958, Train accuracy - 2.63934, val accuracy - 2.90728
+Epoch - 1900, train loss - 2.60488, Train accuracy - 2.65502, val accuracy - 2.97947
+Best Epoch: 942, Best MSE: 2.828269238244953
+Test Accuracy (Best val acc model) - 1.7195140939976383
+
+
+
+Model architecture
+
+class CirConvNet(nn.Module):
+    def __init__(self,layer_sizes, dropout=0):
+        super().__init__()
+        self.dropout_p = dropout
+        # self.layer1 = torch.nn.Conv1d(1, 10, 11)
+        # self.layer2 = torch.nn.Conv1d(10, 10, 11)
+        self.layer1 = torch.nn.Conv1d(1, 5, 5)
+        self.layer2 = torch.nn.Conv1d(5, 5, 5)
+        self.layer3 = torch.nn.Linear(305, 1)
+        # self.layer4 = torch.nn.Linear(10, 1)
+    def forward(self, x):
+        x = torch.unsqueeze(x, 1)
+        x = torch.sin(self.layer1(x))
+        x = torch.sin(self.layer2(x))
+        x = torch.flatten(x, 1)
+        y = self.layer3(x)
+        
+        
+        return y

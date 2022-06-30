@@ -6,7 +6,7 @@ from sklearn.neural_network import MLPClassifier
 import torch
 import torch.nn as nn
 import os
-from data_utils import SignalDataset, read_freq_data
+from data_utils import read_freq_data, get_all_sets
 from torch.utils.data import random_split
 import torchvision.transforms as transforms
 import argparse
@@ -29,12 +29,8 @@ parser.add_argument('--save_path', help="Save Path for classifier", default="mod
 args = parser.parse_args()
 torch.manual_seed(1)
 input_signal, output_signal, labels = read_freq_data(args.folder_path) # The percentage argument needs to be provided via config
-print(input_signal[913], labels[913])
 
-full_dataset = SignalDataset(input_signal, output_signal, labels, transforms.ToTensor())
-train_set, val_set, test_set = random_split(full_dataset, [650, 194, 195])
-print(test_set.indices[100])
-print(test_set[100])
+train_set, val_set, test_set = get_all_sets(input_signal, output_signal, labels)
 ann_upsampler = torch.load(args.upsampler)
 # get_input = lambda x: np.array([ann_upsampler(inp.float()).detach().numpy() for inp, op, label in x])
 get_input = lambda x: np.array([inp.float().detach().numpy() for inp, op, label in x])
@@ -54,21 +50,19 @@ print(f"Test Normal Signals - {np.sum(test_labels==0)}")
 print(f"Test Abnormal Signals - {np.sum(test_labels==1)}")
 
 if args.method == "svm":
-    # clf = SVC(gamma=1.0/(train_input.shape[1] * train_input.var()))
-    clf = SVC()
+    clf = SVC(gamma=1.0/(train_input.shape[1] * train_input.var()))
+    # clf = SVC()
     print(1.0/(train_input.shape[1] * train_input.var()))
     clf.fit(train_input, train_labels)
 elif args.method == "lr":
-    clf = LogisticRegression(C=3)
+    clf = LogisticRegression(C=5)
     # print(1.0/(train_input.shape[1] * train_input.var()))
     clf.fit(train_input, train_labels)
 # exit()
 # Save Model
-# dump(clf, os.path.join(args.save_path, f'{args.method}_classifier_{today}.joblib'), compress=7)
-
 # Save plain C version
-# with open(os.path.join(args.save_path, 'logisticregression_classifier.h'), 'w') as f:
-#     f.write(port(clf))
+with open(os.path.join(args.save_path, 'logisticregression_classifier_69_ftrs.h'), 'w') as f:
+    f.write(port(clf))
     
 # Report test accuracy and display confusion matrix
 print("Test Accuracy")

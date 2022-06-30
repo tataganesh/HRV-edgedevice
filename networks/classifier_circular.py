@@ -66,7 +66,7 @@ class CirConvNetStacked1d(nn.Module):
             self.circ_conv_layers.append(nn.Parameter(torch.randn(layer_size)))
         self.circ_conv_layers = nn.ParameterList(self.circ_conv_layers)
         self.conv1 = nn.Conv1d(len(layer_sizes[1:]), 1, 3)
-        self.w4 = nn.Linear(54, 1)
+        self.w4 = nn.Linear(67, 1)
         
         self.dropout_p = dropout
         

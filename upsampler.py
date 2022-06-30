@@ -1,10 +1,10 @@
 import torch
-from data_utils import read_freq_data, SignalDataset
+from data_utils import read_freq_data, get_all_sets
 import numpy as np
 import torch
 import pandas as pd
 import torch.nn as nn
-from torch.utils.data import random_split, DataLoader
+from torch.utils.data import DataLoader
 import torch.nn.functional as F
 import torch.optim as optim
 import torchvision.transforms as transforms
@@ -24,8 +24,7 @@ class AnnUpsampler:
         self.config_path = config_path
         config=json.load(open(config_path, 'r'))
         input_signal, output_signal, self.labels = read_freq_data(config["folder_path"], config["signal_percentage"])
-        full_dataset = SignalDataset(input_signal, output_signal, self.labels, transforms.ToTensor())
-        self.train_set, self.val_set, self.test_set = random_split(full_dataset, [650, 194, 195])
+        self.train_set, self.val_set, self.test_set = get_all_sets(input_signal, output_signal, self.labels)
         # Data Loaders
         self.train_loader = DataLoader(self.train_set, shuffle=True, batch_size = config["batch_size"])
         self.val_loader = DataLoader(self.val_set, shuffle=True, batch_size = config["batch_size"])
@@ -95,15 +94,27 @@ class AnnUpsampler:
         for inp, op, _ in self.test_loader:
                 mse = self.loss_func(torch.from_numpy(test_upsampled_signals), op.float())
                 print(f"Test MSE - {mse}")
-            
-            
-
+    
+    def inference_on_csv(self, model=None, xlx_path=None):
+        if model is None:
+            model = self.ann_upsampler
+        if xlx_path is None:
+            print("Error: CSV path not given. Exiting")
+            exit(0)
+        input_signals = pd.read_excel(xlx_path, header=None).transpose().to_numpy()        
+        output_signals = model(torch.from_numpy(input_signals).float()).detach().numpy()
+        output_signals_df = pd.DataFrame(output_signals.T)
+        # np.savetxt("12hznormal_reconstructed.csv", output_signals.detach().numpy().T, delimiter=",")
+        output_signals_df.to_excel("12hznormal_reconstructed.xlsx", index=False, header=None)
+        
+        
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='ANN Upsampler Training')
     parser.add_argument('--config', help="path to config with training params", required=True)
     args = parser.parse_args()
     trainer =  AnnUpsampler(config_path=args.config)
-    # trainer.train()
+    trainer.train()
     # trainer.test()
-    trainer.upsample_and_save(torch.load("/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-05-02-15:30:34/upsampler_2022-05-02-15:30:34.pt"))
+    # trainer.upsample_and_save(torch.load("/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-06-12-19:54:42/upsampler_2022-06-12-19:54:42.pt"))
+    # trainer.inference_on_csv(torch.load("/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-06-22-09:28:16/upsampler_2022-06-22-09:28:16.pt"), '/Users/ganesh/UofA/SNN/freq_data/6Hz_normal.xlsx')

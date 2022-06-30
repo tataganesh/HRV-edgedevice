@@ -3,7 +3,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, f1_score
 import torch
 import torch.nn as nn
 import os
-from data_utils import SignalDataset, read_freq_data
+from data_utils import read_freq_data, get_all_sets
 from torch.utils.data import random_split
 import torchvision.transforms as transforms
 import argparse
@@ -48,9 +48,9 @@ class AnomalyClassifier:
         np.random.seed(1)     
         python_random.seed(1)
         self.save_path = config["save_path"]
+        self.upsampler_layer_sizes = config["upsampler_layer_sizes"]
         input_signal, output_signal, self.labels = read_freq_data(config["folder_path"],  config["signal_percentage"])
-        full_dataset = SignalDataset(input_signal, output_signal, self.labels, transforms.ToTensor())
-        train_split, val_split, test_split = random_split(full_dataset, [650, 194, 195])
+        train_split, val_split, test_split = get_all_sets(input_signal, output_signal, self.labels)
         ann_upsampler = torch.load(config["upsampler_path"])
         get_input = lambda x: torch.from_numpy(np.array([ann_upsampler(inp.float()).detach().numpy() for inp, op, label in x]))
         get_label = lambda x: np.array([label for inp, op, label in x])
@@ -82,7 +82,7 @@ class AnomalyClassifier:
             self.classifier = classifier_circular.CirConvNet(config["layer_sizes"])
         else:
             self.classifier = classifier_circular.CirConvNetStacked1d(config["layer_sizes"])
-        summary(self.classifier, (1, 56), device='cpu')
+        summary(self.classifier, (1, 69), device='cpu')
 
         print(list(self.classifier.parameters()))
         
