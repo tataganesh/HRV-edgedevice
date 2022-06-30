@@ -19,7 +19,6 @@ import shutil
 today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
 from torchinfo import summary
 import copy
-import heartpy as hp
 import math
 import matplotlib.pyplot as plt
 
@@ -120,7 +119,6 @@ class HrvRegressor:
                 torch.save(self.regressor, os.path.join(model_info_path, f"regressor_{today}.pt"))
                 shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
         print(f"Best Epoch: {best_val_epoch}, Best MSE: {best_val_mse}")
-        # working_data ,measures= hp.process(self.test_input[50].numpy(),12,calc_freq=True)
         print(f"Test Accuracy (Best val acc model) - {np.sqrt(self.accuracy(self.test_loader, self.best_model))}")
     def load_model(self, model_weights_path):
         self.regressor_net.load_weights(model_weights_path)
