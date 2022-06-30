@@ -1,12 +1,13 @@
 #Conversion
 if [ $1 == "upsampler" ]
 then
-    echo "Converting pytorch model to tflite"
-    python torch_to_onnx.py --pytorch_model_path $2
+    echo "Converting pytorch model to tflite for upsampler"
+    python torch_to_onnx.py --pytorch_model_path $2 --input_size 35
     python onnx_to_tflite.py
 else
-    echo "Converting Tensorflow model to tflite"
-    python tf_to_tflite.py --tf_model_path $2
+    echo "Converting pytorch model to tflite for regressor"
+    python torch_to_onnx.py --pytorch_model_path $2 --input_size 69 
+    python onnx_to_tflite.py
 
  echo "Conversion Completed. Saved as model.tflite"
 fi

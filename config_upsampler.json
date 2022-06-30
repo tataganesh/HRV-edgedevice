@@ -4,6 +4,7 @@
     "weight_decay": 5e-5,
     "epochs": 5000,
     "batch_size": 32,
+    "save_model": false, 
     "save_path": "models/upsampler",
     "signal_percentage": 1, 
     "layer_sizes": [80]

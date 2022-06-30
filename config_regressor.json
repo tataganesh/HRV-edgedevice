@@ -5,7 +5,7 @@
     "epochs": 2000,
     "batch_size": 50,
     "save_path": "models/regressor",
-    "save_model": true, 
+    "save_model": false, 
     "upsampler_path": "/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-06-22-09:28:16/upsampler_2022-06-22-09:28:16.pt",
     "hrv_data": "/Users/ganesh/UofA/SNN/HRV-edgedevice/data/HR_ground_truth.xlsx",
     "signal_percentage": 1,

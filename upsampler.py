@@ -23,6 +23,7 @@ class AnnUpsampler:
         torch.manual_seed(1)
         self.config_path = config_path
         config=json.load(open(config_path, 'r'))
+        self.save_model = config["save_model"]
         input_signal, output_signal, self.labels = read_freq_data(config["folder_path"], config["signal_percentage"])
         self.train_set, self.val_set, self.test_set = get_all_sets(input_signal, output_signal, self.labels)
         # Data Loaders
@@ -62,14 +63,16 @@ class AnnUpsampler:
 
             if not epoch % 100:
                 print(f"Epoch - {epoch}, train loss - {train_loss/len(self.train_loader)*1.0:.5f}, Train accuracy - {self.accuracy(self.train_loader)*1.0:.5f}, val accuracy - {self.accuracy(self.val_loader)*1.0:.5f}")
-            
-        with torch.no_grad():
-            model_info_path = os.path.join(self.save_path, str(today))
-            if os.path.exists(model_info_path):
-                shutil.rmtree(model_info_path)
-            os.makedirs(model_info_path)
-            torch.save(self.ann_upsampler, os.path.join(model_info_path, f"upsampler_{today}.pt"))
-            shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
+        self.test()
+        if self.save_model:    
+            with torch.no_grad():
+                model_info_path = os.path.join(self.save_path, str(today))
+                print(f"Saving Model to {model_info_path}")
+                if os.path.exists(model_info_path):
+                    shutil.rmtree(model_info_path)
+                os.makedirs(model_info_path)
+                torch.save(self.ann_upsampler, os.path.join(model_info_path, f"upsampler_{today}.pt"))
+                shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
         
     def test(self):
         with torch.no_grad():
