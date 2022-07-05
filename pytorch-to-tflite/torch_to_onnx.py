@@ -13,7 +13,7 @@ def conv_inp_op(self, inp, outp):
 parser = argparse.ArgumentParser(description='ANN Upsampler Training')
 parser.add_argument('--pytorch_model_path', help="Path to pytorch model", required=True)
 parser.add_argument('--batch_size', help="Set Batch Size", default=1, type=int)
-parser.add_argument('--input_size', help="Input Size", default=69, type=int)
+parser.add_argument('--input_size', help="Input Size", default=35, type=int)
 
 
 args = parser.parse_args()

@@ -32,7 +32,7 @@ class HrvRegressor:
         python_random.seed(1)
         self.save_path = config["save_path"]
         self.save_model = config["save_model"]
-        input_signal, output_signal, self.labels = read_freq_data(config["folder_path"],  config["signal_percentage"], include_abnormal=True)
+        input_signal, output_signal, self.labels = read_freq_data(config["folder_path"], include_abnormal=True)
         hrv_data_normal_signals = pd.read_excel(config["hrv_data"], header=None).transpose().to_numpy()
         hrv_data = np.zeros(input_signal.shape[0])
         hrv_data[:hrv_data_normal_signals.shape[0]] = hrv_data_normal_signals[:, 0].astype(np.float32)
@@ -64,7 +64,7 @@ class HrvRegressor:
         self.test_loader = DataLoader(self.test_set, batch_size = len(self.test_set))
         # Loss Function
         self.loss_func = torch.nn.MSELoss()
-        self.regressor = regressor_circular.CirConvNet(*config["layer_sizes"])
+        self.regressor = regressor_circular.CirConvNet()
         # self.regressor = regressor_circular.HRNet(3, 8, 69, 1)
         pytorch_total_params = sum(p.numel() for p in self.regressor.parameters() if p.requires_grad)
         print(f"Model Params: {pytorch_total_params}")
@@ -113,6 +113,7 @@ class HrvRegressor:
         if self.save_model:
             with torch.no_grad():
                 model_info_path = os.path.join(self.save_path, str(today))
+                print(f"Saving Model to {model_info_path}")
                 if os.path.exists(model_info_path):
                     shutil.rmtree(model_info_path)
                 os.makedirs(model_info_path)

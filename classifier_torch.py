@@ -49,7 +49,7 @@ class AnomalyClassifier:
         python_random.seed(1)
         self.save_path = config["save_path"]
         self.upsampler_layer_sizes = config["upsampler_layer_sizes"]
-        input_signal, output_signal, self.labels = read_freq_data(config["folder_path"],  config["signal_percentage"])
+        input_signal, output_signal, self.labels = read_freq_data(config["folder_path"])
         train_split, val_split, test_split = get_all_sets(input_signal, output_signal, self.labels)
         ann_upsampler = torch.load(config["upsampler_path"])
         get_input = lambda x: torch.from_numpy(np.array([ann_upsampler(inp.float()).detach().numpy() for inp, op, label in x]))

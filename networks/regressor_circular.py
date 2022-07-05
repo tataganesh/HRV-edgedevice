@@ -27,9 +27,8 @@ class CirConvHRNet(nn.Module):
         return y
 
 class CirConvNet(nn.Module):
-    def __init__(self,layer_sizes, dropout=0):
+    def __init__(self):
         super().__init__()
-        self.dropout_p = dropout
         self.layer1 = torch.nn.Conv1d(1, 5, 5)
         self.layer2 = torch.nn.Conv1d(5, 5, 5)
         self.layer3 = torch.nn.Linear(305, 1)

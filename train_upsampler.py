@@ -24,7 +24,7 @@ class AnnUpsampler:
         self.config_path = config_path
         config=json.load(open(config_path, 'r'))
         self.save_model = config["save_model"]
-        input_signal, output_signal, self.labels = read_freq_data(config["folder_path"], config["signal_percentage"])
+        input_signal, output_signal, self.labels = read_freq_data(config["folder_path"])
         self.train_set, self.val_set, self.test_set = get_all_sets(input_signal, output_signal, self.labels)
         # Data Loaders
         self.train_loader = DataLoader(self.train_set, shuffle=True, batch_size = config["batch_size"])

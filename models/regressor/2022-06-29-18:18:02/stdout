@@ -39,19 +39,13 @@ Model architecture
 class CirConvNet(nn.Module):
     def __init__(self,layer_sizes, dropout=0):
         super().__init__()
-        self.dropout_p = dropout
-        # self.layer1 = torch.nn.Conv1d(1, 10, 11)
-        # self.layer2 = torch.nn.Conv1d(10, 10, 11)
         self.layer1 = torch.nn.Conv1d(1, 5, 5)
         self.layer2 = torch.nn.Conv1d(5, 5, 5)
         self.layer3 = torch.nn.Linear(305, 1)
-        # self.layer4 = torch.nn.Linear(10, 1)
     def forward(self, x):
         x = torch.unsqueeze(x, 1)
         x = torch.sin(self.layer1(x))
         x = torch.sin(self.layer2(x))
         x = torch.flatten(x, 1)
         y = self.layer3(x)
-        
-        
         return y
