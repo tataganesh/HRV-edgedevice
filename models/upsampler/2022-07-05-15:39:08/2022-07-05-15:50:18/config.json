@@ -1,0 +1,10 @@
+{
+    "folder_path": "/content/drive/MyDrive/HRV-edgedevice/data",
+    "lr": 0.9,
+    "weight_decay": 5e-5,
+    "epochs": 5000,
+    "batch_size": 32,
+    "save_model": true, 
+    "save_path": "/content/drive/MyDrive/HRV-edgedevice/models/upsampler",
+    "layer_sizes": [55]
+}
