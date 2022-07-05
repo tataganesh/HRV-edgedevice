@@ -1,5 +1,5 @@
 # HRV-edgedevice
-[Open in Colab](https://colab.research.google.com/drive/1zfv7Uj2l-QWJ9dpxFHZ4ikUdu0U3v5aT?usp=sharing)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1zfv7Uj2l-QWJ9dpxFHZ4ikUdu0U3v5aT?usp=sharing)
 
 DNN-based system to calculate HRV using low frequency input signal
 
