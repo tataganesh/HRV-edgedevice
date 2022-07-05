@@ -6,7 +6,7 @@
     "batch_size": 50,
     "save_path": "models/regressor",
     "save_model": true, 
-    "upsampler_path": "models/upsampler/2022-07-04-19:05:53/upsampler_2022-07-04-19:05:53.pt",
+    "upsampler_path": "/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-07-04-19:05:53/upsampler_2022-07-04-19:05:53.pt",
     "hrv_data": "/Users/ganesh/UofA/SNN/freq_data_large/HR_ground_truth.csv",
     "layer_sizes": [69, 69]
 }

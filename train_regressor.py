@@ -33,7 +33,7 @@ class HrvRegressor:
         self.save_path = config["save_path"]
         self.save_model = config["save_model"]
         input_signal, output_signal, self.labels = read_freq_data(config["folder_path"], include_abnormal=True)
-        hrv_data_normal_signals = pd.read_excel(config["hrv_data"], header=None).transpose().to_numpy()
+        hrv_data_normal_signals = pd.read_csv(config["hrv_data"], header=None).transpose().to_numpy()
         hrv_data = np.zeros(input_signal.shape[0])
         hrv_data[:hrv_data_normal_signals.shape[0]] = hrv_data_normal_signals[:, 0].astype(np.float32)
         train_split, val_split, test_split = get_all_sets(input_signal, output_signal, self.labels, hrv_data)
@@ -65,10 +65,10 @@ class HrvRegressor:
         # Loss Function
         self.loss_func = torch.nn.MSELoss()
         self.regressor = regressor_circular.CirConvNet()
-        # self.regressor = regressor_circular.HRNet(3, 8, 69, 1)
+        # self.regressor = regressor_circular.CirConvHRNet(69, 69)
         pytorch_total_params = sum(p.numel() for p in self.regressor.parameters() if p.requires_grad)
         print(f"Model Params: {pytorch_total_params}")
-        self.optimizer = optim.Adam(self.regressor.parameters(), 1e-2, weight_decay=config["weight_decay"])
+        self.optimizer = optim.Adam(self.regressor.parameters(), lr=config["lr"], weight_decay=config["weight_decay"])
         self.scheduler = optim.lr_scheduler.StepLR(self.optimizer, step_size=1000, gamma=0.5)
         self.epochs = config["epochs"]
         self.save_path = config["save_path"]
@@ -120,7 +120,7 @@ class HrvRegressor:
                 torch.save(self.regressor, os.path.join(model_info_path, f"regressor_{today}.pt"))
                 shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
         print(f"Best Epoch: {best_val_epoch}, Best MSE: {best_val_mse}")
-        print(f"Test Accuracy (Best val acc model) - {np.sqrt(self.accuracy(self.test_loader, self.best_model))}")
+        print(f"Test Accuracy (Best val acc model) - {self.accuracy(self.test_loader, self.best_model)}")
     def load_model(self, model_weights_path):
         self.regressor_net.load_weights(model_weights_path)
     

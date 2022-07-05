@@ -13,15 +13,15 @@ def read_freq_data(folder_path, signal_percentage=1, include_abnormal=True):
     sixhzsignals = list()
     twelvehzsignals = list()
     labels = list()
-    sixhz_normal = pd.read_excel(os.path.join(folder_path, f"6Hz_normal.xlsx"), header=None).transpose()
-    twelvehz_normal = pd.read_excel(os.path.join(folder_path, f"12Hz_normal.xlsx"), header=None).transpose()
+    sixhz_normal = pd.read_csv(os.path.join(folder_path, f"6Hz_normal.csv"), header=None).transpose()
+    twelvehz_normal = pd.read_csv(os.path.join(folder_path, f"12Hz_normal.csv"), header=None).transpose()
     print(f"Normal Signal  shape: {sixhz_normal.shape}, {twelvehz_normal.shape}")
     sixhzsignals.append(sixhz_normal)
     twelvehzsignals.append(twelvehz_normal)
     labels.extend([0] * sixhz_normal.shape[0])
     if include_abnormal:
-        sixhz_abnormal = pd.read_excel(os.path.join(folder_path, f"6Hz_abnormal.xlsx"), header=None).transpose()
-        twelvehz_abnormal = pd.read_excel(os.path.join(folder_path, f"12Hz_abnormal.xlsx"), header=None).transpose()
+        sixhz_abnormal = pd.read_csv(os.path.join(folder_path, f"6Hz_abnormal.csv"), header=None).transpose()
+        twelvehz_abnormal = pd.read_csv(os.path.join(folder_path, f"12Hz_abnormal.csv"), header=None).transpose()
         print(f"Abnormal Signal shape: {sixhz_abnormal.shape}, {twelvehz_abnormal.shape}")
         sixhzsignals.append(sixhz_abnormal)
         twelvehzsignals.append(twelvehz_abnormal)
@@ -63,8 +63,9 @@ class SignalDataset(Dataset):
 
 def get_all_sets(input_signal, output_signal, labels, hrv_data=None):
     full_dataset = SignalDataset(input_signal, output_signal, labels, transforms.ToTensor(), hrv_values=hrv_data)
-    return random_split(full_dataset, [573, 192, 192])
+    # return random_split(full_dataset, [573, 192, 192])
     # return random_split(full_dataset, [521, 200, 150])
+    return random_split(full_dataset, [1211, 404, 404])
 
 
 if __name__ =="__main__":
