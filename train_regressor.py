@@ -66,6 +66,7 @@ class HrvRegressor:
         self.loss_func = torch.nn.MSELoss()
         self.regressor = regressor_circular.CirConvNet()
         # self.regressor = regressor_circular.CirConvHRNet(69, 69)
+        print(self.regressor)
         pytorch_total_params = sum(p.numel() for p in self.regressor.parameters() if p.requires_grad)
         print(f"Model Params: {pytorch_total_params}")
         self.optimizer = optim.Adam(self.regressor.parameters(), lr=config["lr"], weight_decay=config["weight_decay"])
