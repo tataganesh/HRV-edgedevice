@@ -72,6 +72,9 @@ class AnomalyClassifier:
         self.val_loader = DataLoader(self.val_set, shuffle=True, batch_size = config["batch_size"])
         self.test_loader = DataLoader(self.test_set, batch_size = len(self.test_set))
 
+
+        self.device = torch.device(
+            "cuda:0" if torch.cuda.is_available() else "cpu")
         # Loss Function
         print(torch.tensor(np.sum(self.train_labels==0)/np.sum(self.train_labels==1)))
         if config["pos_weight"]:
@@ -79,15 +82,16 @@ class AnomalyClassifier:
         else:
             self.loss_func = torch.nn.BCEWithLogitsLoss()
         if config["conv2d"]:
-            self.classifier = classifier_circular.CirConvNet(config["layer_sizes"])
+            self.classifier = classifier_circular.CirConvNet()
         else:
             self.classifier = classifier_circular.CirConvNetStacked1d(config["layer_sizes"])
         summary(self.classifier, (1, 69), device='cpu')
+        self.classifier = self.classifier.to(self.device)
 
         print(list(self.classifier.parameters()))
         
         # Register hook
-        self.classifier.conv1.register_forward_hook(conv_inp_op)
+        # self.classifier.conv1.register_forward_hook(conv_inp_op)
         pytorch_total_params = sum(p.numel() for p in self.classifier.parameters() if p.requires_grad)
         print(pytorch_total_params)
         # self.optimizer = optim.Adam(self.regressor.parameters(), lr=config["lr"], weight_decay=config["weight_decay"])
@@ -107,6 +111,8 @@ class AnomalyClassifier:
         self.predictions = list()
         with torch.no_grad():
             for inp, labels in loader:
+                inp = inp.to(self.device)
+                labels = labels.to(self.device)
                 pred = model(inp.float())
                 pred[pred > 0.5] = 1
                 pred[pred < 0.5] = 0

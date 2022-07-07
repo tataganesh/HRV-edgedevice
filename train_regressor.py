@@ -62,9 +62,13 @@ class HrvRegressor:
         self.train_loader = DataLoader(self.train_set, shuffle=True, batch_size = config["batch_size"])
         self.val_loader = DataLoader(self.val_set, batch_size = config["batch_size"])
         self.test_loader = DataLoader(self.test_set, batch_size = len(self.test_set))
+        
+        self.device = torch.device(
+            "cuda:0" if torch.cuda.is_available() else "cpu")
+        print(self.device)
         # Loss Function
         self.loss_func = torch.nn.MSELoss()
-        self.regressor = regressor_circular.CirConvNet()
+        self.regressor = regressor_circular.CirConvNet().to(self.device)
         # self.regressor = regressor_circular.CirConvHRNet(69, 69)
         print(self.regressor)
         pytorch_total_params = sum(p.numel() for p in self.regressor.parameters() if p.requires_grad)
@@ -94,6 +98,8 @@ class HrvRegressor:
         for epoch in range(self.epochs):
             train_loss = 0.0
             for inp, label in self.train_loader:
+                inp = inp.to(self.device)
+                label = label.to(self.device)
                 self.optimizer.zero_grad()
                 pred = self.regressor(inp.float())
                 loss = F.mse_loss(pred[:, 0], label.float())

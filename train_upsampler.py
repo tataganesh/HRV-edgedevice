@@ -1,4 +1,5 @@
 import torch
+from zmq import device
 from data_utils import read_freq_data, get_all_sets
 import numpy as np
 import torch
@@ -30,19 +31,25 @@ class AnnUpsampler:
         self.train_loader = DataLoader(self.train_set, shuffle=True, batch_size = config["batch_size"])
         self.val_loader = DataLoader(self.val_set, shuffle=True, batch_size = config["batch_size"])
         self.test_loader = DataLoader(self.test_set, batch_size = len(self.test_set))
-
-        # Loss Functiin
+                
+        self.device = torch.device(
+            "cuda:0" if torch.cuda.is_available() else "cpu")
+        # Loss Function
         self.loss_func = torch.nn.MSELoss()
-        self.ann_upsampler = NeuralNetwork(input_signal.shape[1], output_signal.shape[1], config["layer_sizes"])
+        self.ann_upsampler = NeuralNetwork(input_signal.shape[1], output_signal.shape[1], config["layer_sizes"]).to(self.device)
         print(self.ann_upsampler)
         self.optimizer = optim.SGD(self.ann_upsampler.parameters(), lr=config["lr"], weight_decay=config["weight_decay"])
         self.epochs = config["epochs"]
         self.save_path = config["save_path"]
 
+
+
     def accuracy(self, loader):
         acc = 0.0
         with torch.no_grad():
             for inp, op, labels in loader:
+                inp = inp.to(self.device)
+                op = op.to(self.device)
                 pred = self.ann_upsampler(inp.float())
                 loss = self.loss_func(pred, op.float())
                 acc += loss.item()
