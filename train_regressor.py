@@ -85,6 +85,8 @@ class HrvRegressor:
         acc = 0.0
         with torch.no_grad():
             for inp, labels in loader:
+                inp = inp.to(self.device)
+                labels = labels.to(self.device)
                 pred = model(inp.float())
                 loss = self.loss_func(pred[:, 0], labels.float())
                 acc += loss.item()
@@ -124,7 +126,7 @@ class HrvRegressor:
                 if os.path.exists(model_info_path):
                     shutil.rmtree(model_info_path)
                 os.makedirs(model_info_path)
-                torch.save(self.regressor, os.path.join(model_info_path, f"regressor_{today}.pt"))
+                torch.save(self.regressor.cpu(), os.path.join(model_info_path, f"regressor_{today}.pt"))
                 shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
         print(f"Best Epoch: {best_val_epoch}, Best MSE: {best_val_mse}")
         print(f"Test Accuracy (Best val acc model) - {self.accuracy(self.test_loader, self.best_model)}")

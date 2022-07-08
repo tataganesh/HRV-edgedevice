@@ -60,6 +60,8 @@ class AnnUpsampler:
         for epoch in range(0, self.epochs):
             train_loss = 0.0
             for inp, op, label in self.train_loader:
+                inp = inp.to(self.device)
+                op = op.to(self.device)
                 self.optimizer.zero_grad()
                 pred = self.ann_upsampler(inp.float())
                 loss = self.loss_func(pred, op.float())
@@ -78,7 +80,7 @@ class AnnUpsampler:
                 if os.path.exists(model_info_path):
                     shutil.rmtree(model_info_path)
                 os.makedirs(model_info_path)
-                torch.save(self.ann_upsampler, os.path.join(model_info_path, f"upsampler_{today}.pt"))
+                torch.save(self.ann_upsampler.cpu(), os.path.join(model_info_path, f"upsampler_{today}.pt"))
                 shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
         
     def test(self):
