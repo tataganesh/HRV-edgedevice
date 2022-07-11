@@ -41,18 +41,18 @@ class CirConvNet(nn.Module):
         return y
 
 
-# class HRNet(nn.Module):
-#     def __init__(self,nLayers,hiddenN,nIn,nOut):
-#         super(HRNet, self).__init__()
-#         layers = []
-#         layers.append(torch.nn.Linear(nIn, hiddenN))
-#         layers.append(torch.nn.ReLU())
-#         for i in range(nLayers):
-#             layers.append(torch.nn.Linear(hiddenN, hiddenN))
-#             layers.append(torch.nn.ReLU())
-#         layers.append(torch.nn.Linear(hiddenN, nOut))
+class HRNet(nn.Module):
+    def __init__(self,nLayers,hiddenN,nIn,nOut):
+        super(HRNet, self).__init__()
+        layers = []
+        layers.append(torch.nn.Linear(nIn, hiddenN))
+        layers.append(torch.nn.ReLU())
+        for i in range(nLayers):
+            layers.append(torch.nn.Linear(hiddenN, hiddenN))
+            layers.append(torch.nn.ReLU())
+        layers.append(torch.nn.Linear(hiddenN, nOut))
         
-#         self.net = nn.Sequential(*layers)
+        self.net = nn.Sequential(*layers)
                     
-#     def forward(self,x):
-#         return self.net(x)
+    def forward(self,x):
+        return self.net(x)
