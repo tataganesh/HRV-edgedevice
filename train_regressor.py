@@ -62,9 +62,13 @@ class HrvRegressor:
         self.train_loader = DataLoader(self.train_set, shuffle=True, batch_size = config["batch_size"])
         self.val_loader = DataLoader(self.val_set, batch_size = config["batch_size"])
         self.test_loader = DataLoader(self.test_set, batch_size = len(self.test_set))
+        
+        self.device = torch.device(
+            "cuda:0" if torch.cuda.is_available() else "cpu")
+        print(self.device)
         # Loss Function
         self.loss_func = torch.nn.MSELoss()
-        self.regressor = regressor_circular.CirConvNet()
+        self.regressor = regressor_circular.CirConvNet().to(self.device)
         # self.regressor = regressor_circular.CirConvHRNet(69, 69)
         print(self.regressor)
         pytorch_total_params = sum(p.numel() for p in self.regressor.parameters() if p.requires_grad)
@@ -81,6 +85,8 @@ class HrvRegressor:
         acc = 0.0
         with torch.no_grad():
             for inp, labels in loader:
+                inp = inp.to(self.device)
+                labels = labels.to(self.device)
                 pred = model(inp.float())
                 loss = self.loss_func(pred[:, 0], labels.float())
                 acc += loss.item()
@@ -94,6 +100,8 @@ class HrvRegressor:
         for epoch in range(self.epochs):
             train_loss = 0.0
             for inp, label in self.train_loader:
+                inp = inp.to(self.device)
+                label = label.to(self.device)
                 self.optimizer.zero_grad()
                 pred = self.regressor(inp.float())
                 loss = F.mse_loss(pred[:, 0], label.float())
@@ -118,7 +126,7 @@ class HrvRegressor:
                 if os.path.exists(model_info_path):
                     shutil.rmtree(model_info_path)
                 os.makedirs(model_info_path)
-                torch.save(self.regressor, os.path.join(model_info_path, f"regressor_{today}.pt"))
+                torch.save(self.regressor.cpu(), os.path.join(model_info_path, f"regressor_{today}.pt"))
                 shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
         print(f"Best Epoch: {best_val_epoch}, Best MSE: {best_val_mse}")
         print(f"Test Accuracy (Best val acc model) - {self.accuracy(self.test_loader, self.best_model)}")

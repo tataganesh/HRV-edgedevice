@@ -5,90 +5,106 @@ import torch.nn as nn
 from torch.autograd import grad
 import matplotlib.pyplot as plt
 
-class CirConvNet(nn.Module):
-    def __init__(self,layer_sizes, dropout = 0):
-        super().__init__()
-        self.len = layer_sizes[0]
-        self.circ_conv_layers = list()
-        for layer_size in layer_sizes[1:]:
-            self.circ_conv_layers.append(nn.Parameter(torch.randn(layer_size)))
-        self.circ_conv_layers = nn.ParameterList(self.circ_conv_layers)
-        self.w4 = nn.Linear(layer_sizes[0], 1)
-        self.dropout_p = dropout
+# class CirConvNet(nn.Module):
+#     def __init__(self,layer_sizes, dropout = 0):
+#         super().__init__()
+#         self.len = layer_sizes[0]
+#         self.circ_conv_layers = list()
+#         for layer_size in layer_sizes[1:]:
+#             self.circ_conv_layers.append(nn.Parameter(torch.randn(layer_size)))
+#         self.circ_conv_layers = nn.ParameterList(self.circ_conv_layers)
+#         self.w4 = nn.Linear(layer_sizes[0], 1)
+#         self.dropout_p = dropout
         
-    def forward(self, x):
-        # circular convolution followed by relu
-        for circ_conv_layer in self.circ_conv_layers:
-            x = torch.real(ifft(fft(x,dim=1,norm="ortho")*fft(circ_conv_layer,n=self.len,norm="ortho"),dim=1,norm="ortho"))
-            x = torch.relu(x)
+#     def forward(self, x):
+#         # circular convolution followed by relu
+#         for circ_conv_layer in self.circ_conv_layers:
+#             x = torch.real(ifft(fft(x,dim=1,norm="ortho")*fft(circ_conv_layer,n=self.len,norm="ortho"),dim=1,norm="ortho"))
+#             x = torch.relu(x)
         
-        y = self.w4(x)
-        # x = torch.sin(x)
-        # y = self.w4(x)
+#         y = self.w4(x)
+#         # x = torch.sin(x)
+#         # y = self.w4(x)
         
-        return y
+#         return y
     
 
-class CirConvNetStacked2d(nn.Module):
-    def __init__(self,layer_sizes, dropout = 0):
-        super().__init__()
-        self.len = layer_sizes[0]
-        self.circ_conv_layers = list()
-        for layer_size in layer_sizes[1:]:
-            self.circ_conv_layers.append(nn.Parameter(torch.randn(layer_size)))
-        self.circ_conv_layers = nn.ParameterList(self.circ_conv_layers)
-        self.conv1 = nn.Conv2d(1, 1, 3)
-        self.w4 = nn.Linear(378, 1)
-        self.dropout_p = dropout
+# class CirConvNetStacked2d(nn.Module):
+#     def __init__(self,layer_sizes, dropout = 0):
+#         super().__init__()
+#         self.len = layer_sizes[0]
+#         self.circ_conv_layers = list()
+#         for layer_size in layer_sizes[1:]:
+#             self.circ_conv_layers.append(nn.Parameter(torch.randn(layer_size)))
+#         self.circ_conv_layers = nn.ParameterList(self.circ_conv_layers)
+#         self.conv1 = nn.Conv2d(1, 1, 3)
+#         self.w4 = nn.Linear(378, 1)
+#         self.dropout_p = dropout
         
-    def forward(self, x):
-        # circular convolution followed by relu
-        circ_conv_ops = list()
-        for circ_conv_layer in self.circ_conv_layers:
-            op = torch.real(ifft(fft(x,dim=1,norm="ortho")*fft(circ_conv_layer,n=self.len,norm="ortho"),dim=1,norm="ortho"))
-            op = torch.relu(op)
-            circ_conv_ops.append(op)
-        stacked_layers = torch.stack(circ_conv_ops)
-        stacked_layers = torch.unsqueeze(stacked_layers, dim=0)
-        stacked_layers = torch.permute(stacked_layers, [2, 0, 3, 1])
-        op = self.conv1(stacked_layers)
-        op = torch.flatten(op, 1)
-        op = torch.relu(op)
-        y = self.w4(op)
-        return y
+#     def forward(self, x):
+#         # circular convolution followed by relu
+#         circ_conv_ops = list()
+#         for circ_conv_layer in self.circ_conv_layers:
+#             op = torch.real(ifft(fft(x,dim=1,norm="ortho")*fft(circ_conv_layer,n=self.len,norm="ortho"),dim=1,norm="ortho"))
+#             op = torch.relu(op)
+#             circ_conv_ops.append(op)
+#         stacked_layers = torch.stack(circ_conv_ops)
+#         stacked_layers = torch.unsqueeze(stacked_layers, dim=0)
+#         stacked_layers = torch.permute(stacked_layers, [2, 0, 3, 1])
+#         op = self.conv1(stacked_layers)
+#         op = torch.flatten(op, 1)
+#         op = torch.relu(op)
+#         y = self.w4(op)
+#         return y
     
-class CirConvNetStacked1d(nn.Module):
-    def __init__(self,layer_sizes, dropout = 0):
-        super().__init__()
-        self.len = layer_sizes[0]
-        self.circ_conv_layers = list()
-        for layer_size in layer_sizes[1:]:
-            self.circ_conv_layers.append(nn.Parameter(torch.randn(layer_size)))
-        self.circ_conv_layers = nn.ParameterList(self.circ_conv_layers)
-        self.conv1 = nn.Conv1d(len(layer_sizes[1:]), 1, 3)
-        self.w4 = nn.Linear(67, 1)
+# class CirConvNetStacked1d(nn.Module):
+#     def __init__(self,layer_sizes, dropout = 0):
+#         super().__init__()
+#         self.len = layer_sizes[0]
+#         self.circ_conv_layers = list()
+#         for layer_size in layer_sizes[1:]:
+#             self.circ_conv_layers.append(nn.Parameter(torch.randn(layer_size)))
+#         self.circ_conv_layers = nn.ParameterList(self.circ_conv_layers)
+#         self.conv1 = nn.Conv1d(len(layer_sizes[1:]), 1, 3)
+#         self.w4 = nn.Linear(67, 1)
         
-        self.dropout_p = dropout
+#         self.dropout_p = dropout
         
-    def forward(self, x):
-        # circular convolution followed by relu
-        circ_conv_ops = list()
-        for circ_conv_layer in self.circ_conv_layers:
-            op = torch.real(ifft(fft(x,dim=1,norm="ortho")*fft(circ_conv_layer,n=self.len,norm="ortho"),dim=1,norm="ortho"))
-            op = torch.relu(op)
-            circ_conv_ops.append(op)
-        stacked_layers = torch.stack(circ_conv_ops)
-        stacked_layers = torch.permute(stacked_layers, [1, 0, 2])
-        op = self.conv1(stacked_layers)
-        op = torch.flatten(op, 1)
-        op = torch.relu(op)
+#     def forward(self, x):
+#         # circular convolution followed by relu
+#         circ_conv_ops = list()
+#         for circ_conv_layer in self.circ_conv_layers:
+#             op = torch.real(ifft(fft(x,dim=1,norm="ortho")*fft(circ_conv_layer,n=self.len,norm="ortho"),dim=1,norm="ortho"))
+#             op = torch.relu(op)
+#             circ_conv_ops.append(op)
+#         stacked_layers = torch.stack(circ_conv_ops)
+#         stacked_layers = torch.permute(stacked_layers, [1, 0, 2])
+#         op = self.conv1(stacked_layers)
+#         op = torch.flatten(op, 1)
+#         op = torch.relu(op)
         
-        y = self.w4(op)
-        # x = torch.sin(x)
-        # y = self.w4(x)
+#         y = self.w4(op)
+#         # x = torch.sin(x)
+#         # y = self.w4(x)
         
-        return y
+#         return y
     
+class CirConvNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.layer1 = torch.nn.Conv1d(1, 10, 5)
+        self.layer2 = torch.nn.Conv1d(10, 5, 5)
+        self.layer3 = torch.nn.Conv1d(5, 5, 1)
+        self.layer4 = torch.nn.Linear(305, 1)
+    def forward(self, x):
+        x = torch.unsqueeze(x, 1)
+        x = torch.sin(self.layer1(x))
+        x = torch.sin(self.layer2(x))
+        x = torch.sin(self.layer3(x))
+        x = torch.flatten(x, 1)
+        y = self.layer4(x)
+        return y
+
     
 if __name__ == "__main__":
     activation = dict()

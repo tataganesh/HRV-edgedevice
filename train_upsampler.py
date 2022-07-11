@@ -1,4 +1,5 @@
 import torch
+from zmq import device
 from data_utils import read_freq_data, get_all_sets
 import numpy as np
 import torch
@@ -30,19 +31,25 @@ class AnnUpsampler:
         self.train_loader = DataLoader(self.train_set, shuffle=True, batch_size = config["batch_size"])
         self.val_loader = DataLoader(self.val_set, shuffle=True, batch_size = config["batch_size"])
         self.test_loader = DataLoader(self.test_set, batch_size = len(self.test_set))
-
-        # Loss Functiin
+                
+        self.device = torch.device(
+            "cuda:0" if torch.cuda.is_available() else "cpu")
+        # Loss Function
         self.loss_func = torch.nn.MSELoss()
-        self.ann_upsampler = NeuralNetwork(input_signal.shape[1], output_signal.shape[1], config["layer_sizes"])
+        self.ann_upsampler = NeuralNetwork(input_signal.shape[1], output_signal.shape[1], config["layer_sizes"]).to(self.device)
         print(self.ann_upsampler)
         self.optimizer = optim.SGD(self.ann_upsampler.parameters(), lr=config["lr"], weight_decay=config["weight_decay"])
         self.epochs = config["epochs"]
         self.save_path = config["save_path"]
 
+
+
     def accuracy(self, loader):
         acc = 0.0
         with torch.no_grad():
             for inp, op, labels in loader:
+                inp = inp.to(self.device)
+                op = op.to(self.device)
                 pred = self.ann_upsampler(inp.float())
                 loss = self.loss_func(pred, op.float())
                 acc += loss.item()
@@ -53,6 +60,8 @@ class AnnUpsampler:
         for epoch in range(0, self.epochs):
             train_loss = 0.0
             for inp, op, label in self.train_loader:
+                inp = inp.to(self.device)
+                op = op.to(self.device)
                 self.optimizer.zero_grad()
                 pred = self.ann_upsampler(inp.float())
                 loss = self.loss_func(pred, op.float())
@@ -71,12 +80,14 @@ class AnnUpsampler:
                 if os.path.exists(model_info_path):
                     shutil.rmtree(model_info_path)
                 os.makedirs(model_info_path)
-                torch.save(self.ann_upsampler, os.path.join(model_info_path, f"upsampler_{today}.pt"))
+                torch.save(self.ann_upsampler.cpu(), os.path.join(model_info_path, f"upsampler_{today}.pt"))
                 shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
         
     def test(self):
         with torch.no_grad():
             for test_inp, test_op, labels in self.test_loader:
+                test_inp =  test_inp.to(self.device)
+                test_op =  test_op.to(self.device)
                 pred = self.ann_upsampler(test_inp.float())
                 mse = self.loss_func(pred, test_op.float())
             print(f"Test MSE - {mse}")

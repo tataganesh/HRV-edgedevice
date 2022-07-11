@@ -55,9 +55,18 @@ class AnomalyClassifier:
         get_input = lambda x: torch.from_numpy(np.array([ann_upsampler(inp.float()).detach().numpy() for inp, op, label in x]))
         get_label = lambda x: np.array([label for inp, op, label in x])
         self.train_input, self.train_labels = get_input(train_split), get_label(train_split)
-        self.train_set = list(zip(self.train_input, self.train_labels))
-        self.val_input, self.val_labels = get_input(val_split), get_label(val_split)
         
+        
+        # normal_train_indices = np.argwhere(self.train_labels == 0)
+        # abnormal_train_indices = np.argwhere(self.train_labels == 1)
+        # subsampled_indices = np.random.choice(normal_train_indices[:, 0], size=2000)
+        # all_indices = np.concatenate([subsampled_indices, abnormal_train_indices[:, 0]])
+        # self.train_input = self.train_input[all_indices]
+        # self.train_labels = self.train_labels[all_indices]
+        
+        self.train_set = list(zip(self.train_input, self.train_labels))
+        
+        self.val_input, self.val_labels = get_input(val_split), get_label(val_split)
         self.val_set = list(zip(self.val_input, self.val_labels))
         self.test_input, self.test_labels = get_input(test_split), get_label(test_split)
         self.test_set = list(zip(self.test_input, self.test_labels))
@@ -72,22 +81,22 @@ class AnomalyClassifier:
         self.val_loader = DataLoader(self.val_set, shuffle=True, batch_size = config["batch_size"])
         self.test_loader = DataLoader(self.test_set, batch_size = len(self.test_set))
 
+
+        self.device = torch.device(
+            "cuda:0" if torch.cuda.is_available() else "cpu")
         # Loss Function
-        print(torch.tensor(np.sum(self.train_labels==0)/np.sum(self.train_labels==1)))
         if config["pos_weight"]:
             self.loss_func = torch.nn.BCEWithLogitsLoss(pos_weight=torch.tensor(np.sum(self.train_labels==0)/np.sum(self.train_labels==1)))
         else:
             self.loss_func = torch.nn.BCEWithLogitsLoss()
         if config["conv2d"]:
-            self.classifier = classifier_circular.CirConvNet(config["layer_sizes"])
+            self.classifier = classifier_circular.CirConvNet()
         else:
             self.classifier = classifier_circular.CirConvNetStacked1d(config["layer_sizes"])
         summary(self.classifier, (1, 69), device='cpu')
-
-        print(list(self.classifier.parameters()))
-        
+        self.classifier = self.classifier.to(self.device)        
         # Register hook
-        self.classifier.conv1.register_forward_hook(conv_inp_op)
+        # self.classifier.conv1.register_forward_hook(conv_inp_op)
         pytorch_total_params = sum(p.numel() for p in self.classifier.parameters() if p.requires_grad)
         print(pytorch_total_params)
         # self.optimizer = optim.Adam(self.regressor.parameters(), lr=config["lr"], weight_decay=config["weight_decay"])
@@ -107,6 +116,8 @@ class AnomalyClassifier:
         self.predictions = list()
         with torch.no_grad():
             for inp, labels in loader:
+                inp = inp.to(self.device)
+                labels = labels.to(self.device)
                 pred = model(inp.float())
                 pred[pred > 0.5] = 1
                 pred[pred < 0.5] = 0
@@ -114,7 +125,7 @@ class AnomalyClassifier:
                 normal_acc += torch.sum(pred.squeeze(1)[labels == 0] == 0)
                 abnormal_acc += torch.sum(pred.squeeze(1)[labels == 1])
         if show_confusion:
-            pred = model(self.test_input).detach()
+            pred = model(self.test_input.to(self.device)).cpu().detach()
             pred[pred > 0.5] = 1
             pred[pred < 0.5] = 0
             cm = confusion_matrix(self.test_labels, pred.squeeze(1))
@@ -125,7 +136,7 @@ class AnomalyClassifier:
             return acc/len(loader.dataset), abnormal_acc/np.sum(loader_labels==1), normal_acc/np.sum(loader_labels == 0), f1_score(loader_labels, pred)
 
         if validation:
-            pred = model(self.val_input).detach().squeeze(1)
+            pred = model(self.val_input.to(self.device)).cpu().detach().squeeze(1)
             pred[pred > 0.5] = 1
             pred[pred < 0.5] = 0
             try:
@@ -138,13 +149,14 @@ class AnomalyClassifier:
             
         
     def train(self):
-        # print(f"Test Accuracy - {self.accuracy(self.test_loader, self.classifier, show_confusion=True)}")
         best_val_acc = -1
         best_model = None
         best_epoch = None
         for epoch in range(0, self.epochs):
             train_loss = 0.0
             for inp, label in self.train_loader:
+                inp = inp.to(self.device)
+                label = label.to(self.device)
                 self.optimizer.zero_grad()
                 pred = self.classifier(inp.float())
                 loss = self.loss_func(pred.squeeze(1), label.float()) # + 0.5*l1_regularization
@@ -168,7 +180,7 @@ class AnomalyClassifier:
                 if os.path.exists(model_info_path):
                     shutil.rmtree(model_info_path)
                 os.makedirs(model_info_path)
-                torch.save(self.classifier, os.path.join(model_info_path, f"classifier_{today}.pt"))
+                torch.save(self.classifier.cpu(), os.path.join(model_info_path, f"classifier_{today}.pt"))
                 shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
         print(best_epoch, val_accuracy)
         print(f"Test Accuracy - {self.accuracy(self.test_loader, best_model, show_confusion=True, loader_labels=self.test_labels)}")
