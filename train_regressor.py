@@ -27,9 +27,9 @@ class HrvRegressor:
         # load data
         config = json.load(open(config_path, 'r'))
         self.config_path = config_path
-        torch.manual_seed(1)
-        np.random.seed(1)     
-        python_random.seed(1)
+        torch.manual_seed(config["random_seed"])
+        np.random.seed(config["random_seed"])     
+        python_random.seed(config["random_seed"])
         self.save_path = config["save_path"]
         self.save_model = config["save_model"]
         input_signal, output_signal, self.labels = read_freq_data(config["folder_path"], include_abnormal=True)
@@ -55,8 +55,8 @@ class HrvRegressor:
         self.test_set = list(zip(self.test_input, self.test_labels))
         
         print(f"Train Set Size: {len(self.train_set)}")
-        print(f"Val Set Size: {len(self.train_set)}")
-        print(f"Test Set Size: {len(self.train_set)}")
+        print(f"Val Set Size: {len(self.val_set)}")
+        print(f"Test Set Size: {len(self.test_set)}")
         
         # Dataloaders
         self.train_loader = DataLoader(self.train_set, shuffle=True, batch_size = config["batch_size"])
@@ -68,7 +68,8 @@ class HrvRegressor:
         print(self.device)
         # Loss Function
         self.loss_func = torch.nn.MSELoss()
-        self.regressor = regressor_circular.CirConvNet().to(self.device)
+        # self.regressor = regressor_circular.CirConvNet().to(self.device)
+        self.regressor = regressor_circular.HRNet(2, 8, 69, 1).to(self.device)
         # self.regressor = regressor_circular.CirConvHRNet(69, 69)
         print(self.regressor)
         pytorch_total_params = sum(p.numel() for p in self.regressor.parameters() if p.requires_grad)
@@ -82,21 +83,25 @@ class HrvRegressor:
     def accuracy(self, loader, model=None):
         if model is None:
             model = self.regressor
-        acc = 0.0
+        acc_rmse = 0.0
+        acc_mae = 0.0
         with torch.no_grad():
             for inp, labels in loader:
                 inp = inp.to(self.device)
                 labels = labels.to(self.device)
                 pred = model(inp.float())
                 loss = self.loss_func(pred[:, 0], labels.float())
-                acc += loss.item()
-        return np.sqrt(acc/len(loader))
+                l1_loss = F.l1_loss(pred[:, 0], labels.float())
+                acc_rmse += loss.item()
+                acc_mae += l1_loss.item()
+        return np.sqrt(acc_rmse/len(loader)), acc_mae/len(loader)
     
     
     def train(self):
-        min_mse = 1000000
+        min_rmse = 1000000
+        min_mae = 1000000
         best_val_epoch = -1
-        best_val_mse = -1
+        best_val_mae = -1
         for epoch in range(self.epochs):
             train_loss = 0.0
             for inp, label in self.train_loader:
@@ -111,14 +116,17 @@ class HrvRegressor:
             self.scheduler.step()
             with torch.no_grad():
                 val_loss = 0.0
-                val_accuracy = self.accuracy(self.val_loader) 
-                if val_accuracy < min_mse:
-                    min_mse = val_accuracy
+                val_accuracy_rmse, val_accuracy_mae = self.accuracy(self.val_loader) 
+                if val_accuracy_rmse < min_rmse:
+                    min_rmse = val_accuracy_rmse
                     self.best_model = copy.deepcopy(self.regressor)
                     best_val_epoch = epoch
-                    best_val_mse = min_mse
+                if val_accuracy_mae < min_mae:
+                    min_mae = val_accuracy_mae
+                    
                 if not epoch % 100:
-                    print(f"Epoch - {epoch}, train loss - {math.sqrt(train_loss/len(self.train_set))*1.0:.5f}, Train accuracy - {self.accuracy(self.train_loader)*1.0:.5f}, val accuracy - {val_accuracy*1.0:.5f}")
+                    train_rmse, train_mae = self.accuracy(self.train_loader)
+                    print(f"Epoch - {epoch}, train loss - {train_loss/len(self.train_set)*1.0:.5f}, Train RMSE - {train_rmse:.5f}, Train MAE - {train_mae:.5f}, Val RMSE - {val_accuracy_rmse:.5f}, Val MAE - {val_accuracy_mae:.5f}")
         if self.save_model:
             with torch.no_grad():
                 model_info_path = os.path.join(self.save_path, str(today))
@@ -126,10 +134,11 @@ class HrvRegressor:
                 if os.path.exists(model_info_path):
                     shutil.rmtree(model_info_path)
                 os.makedirs(model_info_path)
-                torch.save(self.regressor.cpu(), os.path.join(model_info_path, f"regressor_{today}.pt"))
+                torch.save(self.best_model.cpu(), os.path.join(model_info_path, f"regressor_{today}.pt"))
                 shutil.copyfile(self.config_path, os.path.join(model_info_path, "config.json"))
-        print(f"Best Epoch: {best_val_epoch}, Best MSE: {best_val_mse}")
-        print(f"Test Accuracy (Best val acc model) - {self.accuracy(self.test_loader, self.best_model)}")
+        print(f"Best Epoch: {best_val_epoch}, RMSE: {min_rmse} MAE: {min_mae}")
+        test_rmse, test_mae = self.accuracy(self.test_loader, self.best_model)
+        print(f"Test Accuracy (Best val acc model): rmse - {test_rmse}, mae - {test_mae}")
     def load_model(self, model_weights_path):
         self.regressor_net.load_weights(model_weights_path)
     
