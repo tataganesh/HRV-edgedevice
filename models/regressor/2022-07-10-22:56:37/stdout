@@ -1,0 +1,40 @@
+Normal Signal  shape: (5081, 35), (5081, 69)
+Abnormal Signal shape: (606, 35), (606, 69)
+Normal Signals count- 5081
+Abnormal Signals count- 606
+6Hz Signals shape - (5687, 35)
+12Hz Signals shape - (5687, 69)
+Labels - (5687,)
+Train Set Size: 4056
+Val Set Size: 517
+Test Set Size: 508
+cpu
+CirConvNet(
+  (layer1): Conv1d(1, 3, kernel_size=(3,), stride=(1,))
+  (layer2): Conv1d(3, 3, kernel_size=(3,), stride=(1,))
+  (layer3): Linear(in_features=195, out_features=1, bias=True)
+)
+Model Params: 238
+Epoch - 0, train loss - 23.06156, Train accuracy - 8.79452, val accuracy - 8.62181
+Epoch - 100, train loss - 4.89116, Train accuracy - 4.72200, val accuracy - 4.93997
+Epoch - 200, train loss - 4.70248, Train accuracy - 4.62430, val accuracy - 4.74155
+Epoch - 300, train loss - 4.70250, Train accuracy - 4.57142, val accuracy - 4.66205
+Epoch - 400, train loss - 4.51039, Train accuracy - 4.48798, val accuracy - 4.69599
+Epoch - 500, train loss - 4.60332, Train accuracy - 4.42137, val accuracy - 4.57255
+Epoch - 600, train loss - 4.52069, Train accuracy - 5.30579, val accuracy - 5.65769
+Epoch - 700, train loss - 4.24282, Train accuracy - 4.32612, val accuracy - 4.43361
+Epoch - 800, train loss - 4.09927, Train accuracy - 4.10395, val accuracy - 4.31798
+Epoch - 900, train loss - 4.21628, Train accuracy - 3.93192, val accuracy - 4.07368
+Epoch - 1000, train loss - 3.97972, Train accuracy - 3.83795, val accuracy - 3.97509
+Epoch - 1100, train loss - 3.98617, Train accuracy - 3.87747, val accuracy - 4.02709
+Epoch - 1200, train loss - 3.91639, Train accuracy - 3.86642, val accuracy - 3.94168
+Epoch - 1300, train loss - 3.96342, Train accuracy - 3.99166, val accuracy - 4.10009
+Epoch - 1400, train loss - 3.89455, Train accuracy - 3.90347, val accuracy - 3.96157
+Epoch - 1500, train loss - 3.89040, Train accuracy - 4.04248, val accuracy - 4.12485
+Epoch - 1600, train loss - 3.88799, Train accuracy - 3.83526, val accuracy - 3.99304
+Epoch - 1700, train loss - 3.90417, Train accuracy - 3.88207, val accuracy - 3.89594
+Epoch - 1800, train loss - 3.91844, Train accuracy - 3.85237, val accuracy - 3.96170
+Epoch - 1900, train loss - 3.88653, Train accuracy - 3.85307, val accuracy - 3.98246
+Saving Model to models/regressor/2022-07-10-22:56:37
+Best Epoch: 1705, Best MSE: 3.708403540243142
+Test Accuracy (Best val acc model) - 4.8714291136685
