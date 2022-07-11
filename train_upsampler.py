@@ -86,6 +86,8 @@ class AnnUpsampler:
     def test(self):
         with torch.no_grad():
             for test_inp, test_op, labels in self.test_loader:
+                test_inp =  test_inp.to(self.device)
+                test_op =  test_op.to(self.device)
                 pred = self.ann_upsampler(test_inp.float())
                 mse = self.loss_func(pred, test_op.float())
             print(f"Test MSE - {mse}")
