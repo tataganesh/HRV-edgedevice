@@ -98,11 +98,12 @@ class CirConvNetClassifier(nn.Module):
         self.layer4 = torch.nn.Linear(305, 1)
     def forward(self, x):
         x = torch.unsqueeze(x, 1)
-        x = torch.sin(self.layer1(x))
-        x = torch.sin(self.layer2(x))
+        x = torch.relu(self.layer1(x))
+        x = torch.relu(self.layer2(x))
         # x = torch.sin(self.layer3(x))
         x = torch.flatten(x, 1)
         y = self.layer4(x)
+        y = torch.sigmoid(y)
         return y
 
 class fcn_classifier(torch.nn.Module):
@@ -116,7 +117,8 @@ class fcn_classifier(torch.nn.Module):
         for layer in self.hidden_layers:
             x = layer(x)
             x = torch.sin(x)
-        x = self.output_layer(x)
+        y = self.output_layer(x)
+        y = torch.sigmoid(y)
         return x
 
     
