@@ -5,7 +5,7 @@ then
     python torch_to_onnx.py --pytorch_model_path $2 --input_size 35
     python onnx_to_tflite.py
 else
-    echo "Converting pytorch model to tflite for regressor"
+    echo "Converting pytorch model to tflite for $1"
     python torch_to_onnx.py --pytorch_model_path $2 --input_size 69 
     python onnx_to_tflite.py
 

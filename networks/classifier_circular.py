@@ -89,43 +89,57 @@ import matplotlib.pyplot as plt
         
 #         return y
     
-class CirConvNet(nn.Module):
+class CirConvNetClassifier(nn.Module):
     def __init__(self):
         super().__init__()
-        self.layer1 = torch.nn.Conv1d(1, 10, 5)
-        self.layer2 = torch.nn.Conv1d(10, 5, 5)
-        self.layer3 = torch.nn.Conv1d(5, 5, 1)
+        self.layer1 = torch.nn.Conv1d(1, 5, 5)
+        self.layer2 = torch.nn.Conv1d(5, 5, 5)
+        # self.layer3 = torch.nn.Conv1d(5, 5, 1)
         self.layer4 = torch.nn.Linear(305, 1)
     def forward(self, x):
         x = torch.unsqueeze(x, 1)
         x = torch.sin(self.layer1(x))
         x = torch.sin(self.layer2(x))
-        x = torch.sin(self.layer3(x))
+        # x = torch.sin(self.layer3(x))
         x = torch.flatten(x, 1)
         y = self.layer4(x)
         return y
 
+class fcn_classifier(torch.nn.Module):
+    def __init__(self, n_inp_features, n_output_features, layer_sizes=[500, 700]):
+        super(fcn_classifier,self).__init__()
+        self.layers = list()
+        layer_sizes.insert(0, n_inp_features)
+        self.hidden_layers = nn.ModuleList([nn.Linear(layer_sizes[i-1], layer_sizes[i])  for i in range(1, len(layer_sizes))])
+        self.output_layer = nn.Linear(layer_sizes[-1], n_output_features)
+    def forward(self,x):
+        for layer in self.hidden_layers:
+            x = layer(x)
+            x = torch.sin(x)
+        x = self.output_layer(x)
+        return x
+
     
-if __name__ == "__main__":
-    activation = dict()
-    def print_shape(self, inp, outp):
-        print('Inside ' + self.__class__.__name__ + ' forward')
-        print('')
-        print('input: ', type(inp))
-        print('input[0]: ', type(inp[0]))
-        print('output: ', type(outp))
-        print('')
-        print('input size:', inp[0].size())
-        print('output size:', outp.data.size())
-        activation["conv2"] = outp.detach()
-    net = CirConvNetStacked2d([56, 56, 56, 56, 56])
-    net.conv1.register_forward_hook(print_shape)
-    x = torch.randn((1, 56))
-    net(x)
-    print(activation['conv2'].numpy())
-    plt.imshow(activation['conv2'].numpy().reshape(54, 2))
-    plt.show()
-    pytorch_total_params = sum(p.numel() for p in net.parameters() if p.requires_grad)
-    print(pytorch_total_params)
+# if __name__ == "__main__":
+#     activation = dict()
+#     def print_shape(self, inp, outp):
+#         print('Inside ' + self.__class__.__name__ + ' forward')
+#         print('')
+#         print('input: ', type(inp))
+#         print('input[0]: ', type(inp[0]))
+#         print('output: ', type(outp))
+#         print('')
+#         print('input size:', inp[0].size())
+#         print('output size:', outp.data.size())
+#         activation["conv2"] = outp.detach()
+#     net = CirConvNetStacked2d([56, 56, 56, 56, 56])
+#     net.conv1.register_forward_hook(print_shape)
+#     x = torch.randn((1, 56))
+#     net(x)
+#     print(activation['conv2'].numpy())
+#     plt.imshow(activation['conv2'].numpy().reshape(54, 2))
+#     plt.show()
+#     pytorch_total_params = sum(p.numel() for p in net.parameters() if p.requires_grad)
+#     print(pytorch_total_params)
 
 
