@@ -8,5 +8,6 @@
     "save_model": true, 
     "upsampler_path": "models/upsampler/2022-07-10-21:58:28/upsampler_2022-07-10-21:58:28.pt",
     "hrv_data": "/Users/ganesh/UofA/SNN/freq_data_final/HR_ground_truth.csv",
-    "random_seed": 1
+    "random_seed": 1,
+    "network_type": "fully_connected"
 }

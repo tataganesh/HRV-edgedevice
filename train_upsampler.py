@@ -15,15 +15,20 @@ import os
 from datetime import datetime
 from networks.net import NeuralNetwork
 import shutil
+import random as python_random
 today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
 
 
 
 class AnnUpsampler:
     def __init__(self, config_path=None):
-        torch.manual_seed(1)
         self.config_path = config_path
         config=json.load(open(config_path, 'r'))
+        
+        torch.manual_seed(config["random_seed"])
+        np.random.seed(config["random_seed"])     
+        python_random.seed(config["random_seed"])
+        
         self.save_model = config["save_model"]
         input_signal, output_signal, self.labels = read_freq_data(config["folder_path"])
         self.train_set, self.val_set, self.test_set = get_all_sets(input_signal, output_signal, self.labels)
@@ -68,8 +73,6 @@ class AnnUpsampler:
                 loss.backward()
                 self.optimizer.step()
                 train_loss += loss.item()
-            val_loss = 0.0
-
             if not epoch % 100:
                 print(f"Epoch - {epoch}, train loss - {train_loss/len(self.train_loader)*1.0:.5f}, Train accuracy - {self.accuracy(self.train_loader)*1.0:.5f}, val accuracy - {self.accuracy(self.val_loader)*1.0:.5f}")
         self.test()
@@ -106,20 +109,19 @@ class AnnUpsampler:
             np.save("data/upsampled_signals_val.npy", val_upsampled_signals)
             np.save("data/upsampled_signals_test.npy", test_upsampled_signals)
         for inp, op, _ in self.test_loader:
-                mse = self.loss_func(torch.from_numpy(test_upsampled_signals), op.float())
-                print(f"Test MSE - {mse}")
+            mse = self.loss_func(torch.from_numpy(test_upsampled_signals), op.float())
+            print(f"Test MSE - {mse}")
     
-    def inference_on_csv(self, model=None, xlx_path=None):
+    def inference_on_csv(self, model=None, csv_path=None):
         if model is None:
             model = self.ann_upsampler
-        if xlx_path is None:
+        if csv_path is None:
             print("Error: CSV path not given. Exiting")
             exit(0)
-        input_signals = pd.read_excel(xlx_path, header=None).transpose().to_numpy()        
+        input_signals = pd.read_csv(csv_path, header=None).transpose().to_numpy()        
         output_signals = model(torch.from_numpy(input_signals).float()).detach().numpy()
         output_signals_df = pd.DataFrame(output_signals.T)
-        # np.savetxt("12hznormal_reconstructed.csv", output_signals.detach().numpy().T, delimiter=",")
-        output_signals_df.to_excel("12hznormal_reconstructed.xlsx", index=False, header=None)
+        output_signals_df.to_csv("data/12hznormal_reconstructed.csv", index=False, header=None)
         
         
 if __name__ == "__main__":

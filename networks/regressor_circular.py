@@ -29,8 +29,10 @@ class CirConvHRNet(nn.Module):
 class CirConvNet(nn.Module):
     def __init__(self):
         super().__init__()
-        self.layer1 = torch.nn.Conv1d(1, 5, 5)
-        self.layer2 = torch.nn.Conv1d(5, 5, 5)
+        num_channels = 5
+        kernel_size = 5
+        self.layer1 = torch.nn.Conv1d(1, num_channels, kernel_size)
+        self.layer2 = torch.nn.Conv1d(num_channels, num_channels, kernel_size)
         self.layer3 = torch.nn.Linear(305, 1)
     def forward(self, x):
         x = torch.unsqueeze(x, 1)

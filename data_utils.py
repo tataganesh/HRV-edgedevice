@@ -66,7 +66,7 @@ def get_all_sets(input_signal, output_signal, labels, hrv_data=None):
     # return random_split(full_dataset, [573, 192, 192])
     # return random_split(full_dataset, [521, 200, 150])
     # return random_split(full_dataset, [1211, 404, 404])
-    return random_split(full_dataset, [4549, 569, 569])
+    return random_split(full_dataset, [3979, 854, 854])
 
 
 if __name__ =="__main__":

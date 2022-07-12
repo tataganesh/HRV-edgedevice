@@ -68,9 +68,11 @@ class HrvRegressor:
         print(self.device)
         # Loss Function
         self.loss_func = torch.nn.MSELoss()
-        # self.regressor = regressor_circular.CirConvNet().to(self.device)
-        self.regressor = regressor_circular.HRNet(2, 8, 69, 1).to(self.device)
-        # self.regressor = regressor_circular.CirConvHRNet(69, 69)
+        if config["network_type"] == "fully_connected":
+            self.regressor = regressor_circular.HRNet(2, 8, 69, 1).to(self.device)
+        elif config["network_type"] == "conv1D":
+            self.regressor = regressor_circular.CirConvNet().to(self.device)
+        
         print(self.regressor)
         pytorch_total_params = sum(p.numel() for p in self.regressor.parameters() if p.requires_grad)
         print(f"Model Params: {pytorch_total_params}")
