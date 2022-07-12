@@ -1,0 +1,40 @@
+Normal Signal  shape: (4975, 35), (4975, 69)
+Abnormal Signal shape: (712, 35), (712, 69)
+Normal Signals count- 4975
+Abnormal Signals count- 712
+6Hz Signals shape - (5687, 35)
+12Hz Signals shape - (5687, 69)
+Labels - (5687,)
+Train Normal Signals - 3467
+Train Abnormal Signals - 512
+Test Normal Signals - 754
+Test Abnormal Signals - 100
+CirConvNetClassifier(
+  (layer1): Conv1d(1, 5, kernel_size=(5,), stride=(1,))
+  (layer2): Conv1d(5, 5, kernel_size=(5,), stride=(1,))
+  (layer4): Linear(in_features=305, out_features=1, bias=True)
+)
+466
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 0.001
+    maximize: False
+    weight_decay: 0
+)
+Epoch - 0, train loss - 0.45729, Train accuracy - 0.87132, val accuracy - 0.88290, val abnormal - 0.0, val normal - 1.0, val F1 - 0.0
+Epoch - 100, train loss - 0.21035, Train accuracy - 0.91681, val accuracy - 0.91569, val abnormal - 0.5099999904632568, val normal - 0.9694960117340088, val F1 - 0.5862068965517241
+Epoch - 200, train loss - 0.15830, Train accuracy - 0.93843, val accuracy - 0.92506, val abnormal - 0.550000011920929, val normal - 0.9748010635375977, val F1 - 0.632183908045977
+Epoch - 300, train loss - 0.14185, Train accuracy - 0.93868, val accuracy - 0.91803, val abnormal - 0.7799999713897705, val normal - 0.9363394975662231, val F1 - 0.6902654867256637
+Epoch - 400, train loss - 0.12383, Train accuracy - 0.95175, val accuracy - 0.93326, val abnormal - 0.6800000071525574, val normal - 0.9668434858322144, val F1 - 0.7046632124352332
+Epoch - 500, train loss - 0.11434, Train accuracy - 0.95527, val accuracy - 0.92974, val abnormal - 0.6700000166893005, val normal - 0.9641909599304199, val F1 - 0.6907216494845361
+Epoch - 600, train loss - 0.11167, Train accuracy - 0.95803, val accuracy - 0.92857, val abnormal - 0.6800000071525574, val normal - 0.9615384340286255, val F1 - 0.6903553299492386
+Epoch - 700, train loss - 0.09976, Train accuracy - 0.96105, val accuracy - 0.93326, val abnormal - 0.7200000286102295, val normal - 0.9615384340286255, val F1 - 0.7164179104477613
+Epoch - 800, train loss - 0.09801, Train accuracy - 0.96331, val accuracy - 0.92857, val abnormal - 0.699999988079071, val normal - 0.9588859677314758, val F1 - 0.6965174129353233
+Epoch - 900, train loss - 0.09246, Train accuracy - 0.95954, val accuracy - 0.91686, val abnormal - 0.7699999809265137, val normal - 0.9363394975662231, val F1 - 0.6844444444444444
+Saving Model
+Saving Model to models/classifier/2022-07-12-17:34:57
+Validation best Epoch: 469, Acc: 0.9332552552223206, F1: 0.7272727272727273
+Test Set - Accuracy: 0.9391100406646729, Abnormal: 0.7599999904632568, Normal: 0.9628646969795227, F1: 0.7450980392156863
