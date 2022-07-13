@@ -35,6 +35,6 @@ Epoch - 700, train loss - 0.09976, Train accuracy - 0.96105, val accuracy - 0.93
 Epoch - 800, train loss - 0.09801, Train accuracy - 0.96331, val accuracy - 0.92857, val abnormal - 0.699999988079071, val normal - 0.9588859677314758, val F1 - 0.6965174129353233
 Epoch - 900, train loss - 0.09246, Train accuracy - 0.95954, val accuracy - 0.91686, val abnormal - 0.7699999809265137, val normal - 0.9363394975662231, val F1 - 0.6844444444444444
 Saving Model
-Saving Model to models/classifier/2022-07-12-17:34:57
+Saving Model to models/classifier/2022-07-12-17:58:19
 Validation best Epoch: 469, Acc: 0.9332552552223206, F1: 0.7272727272727273
 Test Set - Accuracy: 0.9391100406646729, Abnormal: 0.7599999904632568, Normal: 0.9628646969795227, F1: 0.7450980392156863
