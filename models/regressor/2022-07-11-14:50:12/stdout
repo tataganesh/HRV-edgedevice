@@ -21,25 +21,26 @@ HRNet(
   )
 )
 Model Params: 713
-Epoch - 0, train loss - 1326.10230, Train RMSE - 10.13845, Train MAE - 7.79528, Val RMSE - 9.25073, Val MAE - 7.23547
-Epoch - 100, train loss - 31.98484, Train RMSE - 6.39083, Train MAE - 5.14247, Val RMSE - 6.06242, Val MAE - 4.81621
-Epoch - 200, train loss - 27.99336, Train RMSE - 5.24699, Train MAE - 3.82491, Val RMSE - 4.81669, Val MAE - 3.58503
-Epoch - 300, train loss - 26.19199, Train RMSE - 5.98241, Train MAE - 4.75202, Val RMSE - 5.63308, Val MAE - 4.43675
-Epoch - 400, train loss - 26.04916, Train RMSE - 5.13927, Train MAE - 3.82526, Val RMSE - 4.68714, Val MAE - 3.49546
-Epoch - 500, train loss - 26.18838, Train RMSE - 5.22476, Train MAE - 3.93130, Val RMSE - 4.74653, Val MAE - 3.56466
-Epoch - 600, train loss - 27.08226, Train RMSE - 5.18400, Train MAE - 3.89520, Val RMSE - 4.82395, Val MAE - 3.60001
-Epoch - 700, train loss - 26.00130, Train RMSE - 5.23093, Train MAE - 3.81636, Val RMSE - 4.81138, Val MAE - 3.60463
-Epoch - 800, train loss - 25.70402, Train RMSE - 4.92909, Train MAE - 3.57915, Val RMSE - 4.56966, Val MAE - 3.35684
-Epoch - 900, train loss - 25.92128, Train RMSE - 4.91617, Train MAE - 3.55662, Val RMSE - 4.56946, Val MAE - 3.34178
-Epoch - 1000, train loss - 24.01260, Train RMSE - 4.85356, Train MAE - 3.50536, Val RMSE - 4.50720, Val MAE - 3.25916
-Epoch - 1100, train loss - 25.12658, Train RMSE - 4.86406, Train MAE - 3.52331, Val RMSE - 4.52794, Val MAE - 3.31446
-Epoch - 1200, train loss - 23.98451, Train RMSE - 4.80111, Train MAE - 3.49110, Val RMSE - 4.48114, Val MAE - 3.28030
-Epoch - 1300, train loss - 23.74066, Train RMSE - 4.82642, Train MAE - 3.58230, Val RMSE - 4.49533, Val MAE - 3.31372
-Epoch - 1400, train loss - 24.08646, Train RMSE - 4.78255, Train MAE - 3.50214, Val RMSE - 4.47748, Val MAE - 3.30455
-Epoch - 1500, train loss - 24.36934, Train RMSE - 4.77519, Train MAE - 3.50719, Val RMSE - 4.46672, Val MAE - 3.27243
-Epoch - 1600, train loss - 23.59256, Train RMSE - 4.86480, Train MAE - 3.63684, Val RMSE - 4.57721, Val MAE - 3.42475
-Epoch - 1700, train loss - 24.11009, Train RMSE - 4.80764, Train MAE - 3.50288, Val RMSE - 4.48879, Val MAE - 3.30453
-Epoch - 1800, train loss - 23.84564, Train RMSE - 4.79236, Train MAE - 3.52843, Val RMSE - 4.50794, Val MAE - 3.35754
-Epoch - 1900, train loss - 23.73972, Train RMSE - 4.84643, Train MAE - 3.51252, Val RMSE - 4.47720, Val MAE - 3.26458
-Best Epoch: 1996, RMSE: 4.4456238595700155 MAE: 3.211321453253428
-Test Accuracy (Best val acc model): rmse - 5.613571255067292, mae - 3.793715715408325
+Epoch - 0, train loss - 1266.44265, Train RMSE - 12.52755, Train MAE - 9.24428, Val RMSE - 11.75210, Val MAE - 9.00180
+Epoch - 100, train loss - 30.43172, Train RMSE - 5.22063, Train MAE - 3.74375, Val RMSE - 5.18840, Val MAE - 3.78490
+Epoch - 200, train loss - 28.24587, Train RMSE - 5.12779, Train MAE - 3.72341, Val RMSE - 5.18958, Val MAE - 3.75923
+Epoch - 300, train loss - 28.98671, Train RMSE - 5.19000, Train MAE - 3.80553, Val RMSE - 5.44265, Val MAE - 3.99254
+Epoch - 400, train loss - 25.70129, Train RMSE - 5.63634, Train MAE - 4.28082, Val RMSE - 5.88186, Val MAE - 4.45352
+Epoch - 500, train loss - 24.77762, Train RMSE - 4.88410, Train MAE - 3.55995, Val RMSE - 5.25888, Val MAE - 3.78609
+Epoch - 600, train loss - 24.61978, Train RMSE - 5.41298, Train MAE - 4.18360, Val RMSE - 5.71398, Val MAE - 4.29696
+Epoch - 700, train loss - 23.91572, Train RMSE - 5.25275, Train MAE - 3.88660, Val RMSE - 5.62412, Val MAE - 4.11790
+Epoch - 800, train loss - 23.63206, Train RMSE - 4.77349, Train MAE - 3.50101, Val RMSE - 5.17046, Val MAE - 3.70702
+Epoch - 900, train loss - 25.11248, Train RMSE - 4.81896, Train MAE - 3.54602, Val RMSE - 5.20454, Val MAE - 3.77553
+Epoch - 1000, train loss - 23.97536, Train RMSE - 4.81202, Train MAE - 3.49961, Val RMSE - 5.18066, Val MAE - 3.73427
+Epoch - 1100, train loss - 23.30158, Train RMSE - 4.79673, Train MAE - 3.53757, Val RMSE - 5.16946, Val MAE - 3.70703
+Epoch - 1200, train loss - 23.61066, Train RMSE - 4.83406, Train MAE - 3.53666, Val RMSE - 5.27080, Val MAE - 3.79225
+Epoch - 1300, train loss - 24.44425, Train RMSE - 4.78242, Train MAE - 3.49116, Val RMSE - 5.21140, Val MAE - 3.73463
+Epoch - 1400, train loss - 23.21940, Train RMSE - 4.89745, Train MAE - 3.65045, Val RMSE - 5.30369, Val MAE - 3.88368
+Epoch - 1500, train loss - 23.66287, Train RMSE - 4.96616, Train MAE - 3.65888, Val RMSE - 5.30835, Val MAE - 3.81915
+Epoch - 1600, train loss - 23.50199, Train RMSE - 4.82269, Train MAE - 3.55944, Val RMSE - 5.29718, Val MAE - 3.85045
+Epoch - 1700, train loss - 24.00028, Train RMSE - 4.87739, Train MAE - 3.57261, Val RMSE - 5.25459, Val MAE - 3.80394
+Epoch - 1800, train loss - 24.19060, Train RMSE - 5.04426, Train MAE - 3.80841, Val RMSE - 5.38328, Val MAE - 3.97647
+Epoch - 1900, train loss - 23.90921, Train RMSE - 4.75348, Train MAE - 3.46871, Val RMSE - 5.19367, Val MAE - 3.69596
+Saving Model to models/regressor/2022-07-13-16:31:56
+Best Epoch: 144, RMSE: 4.9850503509820205 MAE: 3.557147204875946
+Test Accuracy (Best val acc model): rmse - 5.97669494083239, mae - 4.2399115562438965

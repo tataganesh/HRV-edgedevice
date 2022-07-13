@@ -2,7 +2,7 @@ import torch
 import sys
 sys.path.append('../')
 from networks.net import NeuralNetwork
-from networks.regressor_circular import CirConvNet
+from networks.regressor_circular import CirConvNet, HRNet
 from networks.classifier_circular import CirConvNetClassifier
 import argparse
 

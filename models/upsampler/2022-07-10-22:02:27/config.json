@@ -1,5 +1,5 @@
 {
-    "folder_path": "/Users/ganesh/UofA/SNN/freq_data_final",
+    "folder_path": "/Users/ganesh/UofA/SNN/freq_data_final_corrected",
     "lr": 0.9,
     "weight_decay": 0,
     "epochs": 2000,

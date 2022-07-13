@@ -98,7 +98,6 @@ class HrvRegressor:
                 acc_mae += l1_loss.item()
         return np.sqrt(acc_rmse/len(loader)), acc_mae/len(loader)
     
-    
     def train(self):
         min_rmse = 1000000
         min_mae = 1000000
@@ -141,8 +140,20 @@ class HrvRegressor:
         print(f"Best Epoch: {best_val_epoch}, RMSE: {min_rmse} MAE: {min_mae}")
         test_rmse, test_mae = self.accuracy(self.test_loader, self.best_model)
         print(f"Test Accuracy (Best val acc model): rmse - {test_rmse}, mae - {test_mae}")
-    def load_model(self, model_weights_path):
-        self.regressor_net.load_weights(model_weights_path)
+        
+    def inference_on_csv(self, csv_path, model_path, upsampler_path=None):
+        model = torch.load(model_path)
+        if csv_path is None:
+            print("Error: CSV path not given. Exiting")
+            exit(0)
+        input_signals = pd.read_csv(csv_path, header=None).transpose().to_numpy()
+        if upsampler_path:
+            upsampler = torch.load(upsampler_path)  
+            upsampler.eval()  
+            input_signals = upsampler(torch.from_numpy(input_signals).float()).detach().numpy()
+        output_signals = model(torch.from_numpy(input_signals).float()).detach().numpy()
+        output_signals_df = pd.DataFrame(output_signals)
+        output_signals_df.to_csv("data/hrv_inferenced_reconstructed_1.csv", index=False, header=None)
     
         
 if __name__ == "__main__":
@@ -153,3 +164,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     trainer =  HrvRegressor(config_path=args.config, signal_type=args.signal_type)
     trainer.train()
+    # trainer.inference_on_csv('/Users/ganesh/UofA/SNN/freq_data_final_corrected/6Hz_normal.csv', '/Users/ganesh/UofA/SNN/HRV-edgedevice/models/regressor/2022-07-10-23:19:40/regressor_2022-07-10-23:19:40.pt', 'models/upsampler/2022-07-10-21:40:37/upsampler_2022-07-10-21:40:37.pt')

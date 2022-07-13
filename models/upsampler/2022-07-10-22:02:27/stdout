@@ -1,7 +1,7 @@
-Normal Signal  shape: (5081, 35), (5081, 69)
-Abnormal Signal shape: (606, 35), (606, 69)
-Normal Signals count- 5081
-Abnormal Signals count- 606
+Normal Signal  shape: (4975, 35), (4975, 69)
+Abnormal Signal shape: (712, 35), (712, 69)
+Normal Signals count- 4975
+Abnormal Signals count- 712
 6Hz Signals shape - (5687, 35)
 12Hz Signals shape - (5687, 69)
 Labels - (5687,)
@@ -11,25 +11,25 @@ NeuralNetwork(
   )
   (output_layer): Linear(in_features=50, out_features=69, bias=True)
 )
-Epoch - 0, train loss - 0.07727, Train accuracy - 0.06229, val accuracy - 0.06196
-Epoch - 100, train loss - 0.02738, Train accuracy - 0.02756, val accuracy - 0.02878
-Epoch - 200, train loss - 0.02623, Train accuracy - 0.02853, val accuracy - 0.02950
-Epoch - 300, train loss - 0.02557, Train accuracy - 0.02584, val accuracy - 0.02711
-Epoch - 400, train loss - 0.02513, Train accuracy - 0.02731, val accuracy - 0.02917
-Epoch - 500, train loss - 0.02478, Train accuracy - 0.02534, val accuracy - 0.02686
-Epoch - 600, train loss - 0.02456, Train accuracy - 0.02492, val accuracy - 0.02660
-Epoch - 700, train loss - 0.02436, Train accuracy - 0.02673, val accuracy - 0.02859
-Epoch - 800, train loss - 0.02404, Train accuracy - 0.02471, val accuracy - 0.02628
-Epoch - 900, train loss - 0.02386, Train accuracy - 0.02403, val accuracy - 0.02593
-Epoch - 1000, train loss - 0.02383, Train accuracy - 0.02477, val accuracy - 0.02641
-Epoch - 1100, train loss - 0.02364, Train accuracy - 0.02426, val accuracy - 0.02618
-Epoch - 1200, train loss - 0.02345, Train accuracy - 0.02394, val accuracy - 0.02576
-Epoch - 1300, train loss - 0.02339, Train accuracy - 0.02537, val accuracy - 0.02698
-Epoch - 1400, train loss - 0.02329, Train accuracy - 0.02531, val accuracy - 0.02695
-Epoch - 1500, train loss - 0.02310, Train accuracy - 0.02364, val accuracy - 0.02565
-Epoch - 1600, train loss - 0.02314, Train accuracy - 0.02333, val accuracy - 0.02535
-Epoch - 1700, train loss - 0.02306, Train accuracy - 0.02328, val accuracy - 0.02524
-Epoch - 1800, train loss - 0.02295, Train accuracy - 0.02304, val accuracy - 0.02496
-Epoch - 1900, train loss - 0.02292, Train accuracy - 0.02319, val accuracy - 0.02503
-Test MSE - 0.02995874546468258
-Saving Model to models/upsampler/2022-07-10-22:02:27
+Epoch - 0, train loss - 0.06920, Train accuracy - 0.05258, val accuracy - 0.05307
+Epoch - 100, train loss - 0.01228, Train accuracy - 0.01309, val accuracy - 0.01359
+Epoch - 200, train loss - 0.01130, Train accuracy - 0.01151, val accuracy - 0.01190
+Epoch - 300, train loss - 0.01084, Train accuracy - 0.01101, val accuracy - 0.01147
+Epoch - 400, train loss - 0.01056, Train accuracy - 0.01063, val accuracy - 0.01100
+Epoch - 500, train loss - 0.01043, Train accuracy - 0.01053, val accuracy - 0.01090
+Epoch - 600, train loss - 0.01035, Train accuracy - 0.01063, val accuracy - 0.01097
+Epoch - 700, train loss - 0.01019, Train accuracy - 0.01031, val accuracy - 0.01069
+Epoch - 800, train loss - 0.01002, Train accuracy - 0.01020, val accuracy - 0.01061
+Epoch - 900, train loss - 0.00999, Train accuracy - 0.01003, val accuracy - 0.01043
+Epoch - 1000, train loss - 0.00994, Train accuracy - 0.01008, val accuracy - 0.01052
+Epoch - 1100, train loss - 0.00982, Train accuracy - 0.00996, val accuracy - 0.01044
+Epoch - 1200, train loss - 0.00978, Train accuracy - 0.01006, val accuracy - 0.01045
+Epoch - 1300, train loss - 0.00974, Train accuracy - 0.00979, val accuracy - 0.01023
+Epoch - 1400, train loss - 0.00972, Train accuracy - 0.00984, val accuracy - 0.01035
+Epoch - 1500, train loss - 0.00969, Train accuracy - 0.01005, val accuracy - 0.01052
+Epoch - 1600, train loss - 0.00967, Train accuracy - 0.00981, val accuracy - 0.01027
+Epoch - 1700, train loss - 0.00964, Train accuracy - 0.00975, val accuracy - 0.01023
+Epoch - 1800, train loss - 0.00963, Train accuracy - 0.00966, val accuracy - 0.01012
+Epoch - 1900, train loss - 0.00958, Train accuracy - 0.00966, val accuracy - 0.01015
+Test MSE - 0.010546447709202766
+Saving Model to models/upsampler/2022-07-13-13:59:02
