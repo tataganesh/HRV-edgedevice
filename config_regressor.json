@@ -1,12 +1,12 @@
 {
-    "folder_path": "/Users/ganesh/UofA/SNN/freq_data_large",
-    "lr": 0.005,
-    "weight_decay": 0.5,
+    "folder_path": "/Users/ganesh/UofA/SNN/freq_data_final",
+    "lr": 0.05,
+    "weight_decay": 0.05,
     "epochs": 2000,
-    "batch_size": 50,
+    "batch_size": 64,
     "save_path": "models/regressor",
     "save_model": true, 
-    "upsampler_path": "models/upsampler/2022-07-04-19:05:53/upsampler_2022-07-04-19:05:53.pt",
-    "hrv_data": "/Users/ganesh/UofA/SNN/freq_data_large/HR_ground_truth.csv",
-    "layer_sizes": [69, 69]
+    "upsampler_path": "models/upsampler/2022-07-10-21:58:28/upsampler_2022-07-10-21:58:28.pt",
+    "hrv_data": "/Users/ganesh/UofA/SNN/freq_data_final/HR_ground_truth.csv",
+    "random_seed": 1,
 }

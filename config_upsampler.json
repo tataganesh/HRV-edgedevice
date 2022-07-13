@@ -1,10 +1,11 @@
 {
-    "folder_path": "/Users/ganesh/UofA/SNN/freq_data_large",
+    "folder_path": "/Users/ganesh/UofA/SNN/freq_data_final_corrected",
     "lr": 0.9,
-    "weight_decay": 5e-5,
-    "epochs": 5000,
+    "weight_decay": 0,
+    "epochs": 2000,
     "batch_size": 32,
     "save_model": true, 
     "save_path": "models/upsampler",
-    "layer_sizes": [55]
+    "layer_sizes": [50],
+    "random_seed": 1
 }

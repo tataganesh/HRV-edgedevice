@@ -1,14 +1,13 @@
 {
-    "folder_path": "/Users/ganesh/UofA/SNN/freq_data",
+    "folder_path": "/Users/ganesh/UofA/SNN/freq_data_final_corrected",
     "lr": 0.5,
     "weight_decay": 5e-4,
-    "epochs": 2000,
-    "batch_size": 32,
+    "epochs": 100,
+    "batch_size": 64,
     "save_path": "models/classifier",
     "save_model": false, 
-    "upsampler_path": "/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-06-22-09:28:16/upsampler_2022-06-22-09:28:16.pt",
-    "upsampler_layer_sizes": [80],
-    "layer_sizes": [69, 69, 69, 69, 69, 69],
+    "upsampler_path": "/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-07-10-21:58:28/upsampler_2022-07-10-21:58:28.pt",
     "pos_weight": false,
-    "conv2d": false
+    "conv2d": true,
+    "random_seed": 1
 }

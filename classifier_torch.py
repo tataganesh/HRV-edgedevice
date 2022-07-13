@@ -23,17 +23,6 @@ from torchinfo import summary
 import shutil
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-# class FocalLoss(nn.modules.loss._WeightedLoss):
-#     def __init__(self, weight=None, gamma=2,reduction='mean'):
-#         super(FocalLoss, self).__init__(weight,reduction=reduction)
-#         self.gamma = gamma
-#         self.weight = weight #weight parameter will act as the alpha parameter to balance class weights
-
-#     def forward(self, input, target):
-#         ce_loss = F.binary_cross_entropy(torch.sigmoid(input), target,reduction=self.reduction,weight=self.weight)
-#         pt = torch.exp(-ce_loss)
-#         focal_loss = ((1 - pt) ** self.gamma * ce_loss).mean()
-#         return focal_loss
 activations = dict()
 def conv_inp_op(self, inp, outp):
     activations["input"] = inp[0].detach()
@@ -44,9 +33,9 @@ class AnomalyClassifier:
         # load data
         config=json.load(open(config_path, 'r'))
         self.config_path = config_path
-        torch.manual_seed(1)
-        np.random.seed(1)     
-        python_random.seed(1)
+        torch.manual_seed(config["random_seed"])
+        np.random.seed(config["random_seed"])     
+        python_random.seed(config["random_seed"])
         self.save_path = config["save_path"]
         input_signal, output_signal, self.labels = read_freq_data(config["folder_path"])
         train_split, val_split, test_split = get_all_sets(input_signal, output_signal, self.labels)
@@ -84,7 +73,6 @@ class AnomalyClassifier:
             self.classifier = classifier_circular.CirConvNetClassifier()
         else:
             self.classifier = classifier_circular.fcn_classifier(69, 1, [20])
-        # summary(self.classifier, (1, 69), device='cpu')
         print(self.classifier)
         self.classifier = self.classifier.to(self.device)        
         # Register hook
