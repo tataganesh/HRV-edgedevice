@@ -1,0 +1,13 @@
+{
+    "folder_path": "/Users/ganesh/UofA/SNN/freq_data_final_corrected",
+    "lr": 0.05,
+    "weight_decay": 0,
+    "epochs": 1000,
+    "batch_size": 64,
+    "save_path": "models/classifier",
+    "save_model": true, 
+    "upsampler_path": "/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-07-10-21:58:28/upsampler_2022-07-10-21:58:28.pt",
+    "pos_weight": false,
+    "conv2d": false,
+    "random_seed": 1
+}

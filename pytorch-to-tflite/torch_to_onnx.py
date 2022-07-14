@@ -3,7 +3,7 @@ import sys
 sys.path.append('../')
 from networks.net import NeuralNetwork
 from networks.regressor_circular import CirConvNet, HRNet
-from networks.classifier_circular import CirConvNetClassifier
+from networks.classifier_circular import CirConvNetClassifier, fcn_classifier
 import argparse
 
 activations = dict()
