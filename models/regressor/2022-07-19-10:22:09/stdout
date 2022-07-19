@@ -1,0 +1,40 @@
+Normal Signal  shape: (4975, 35), (4975, 69)
+Abnormal Signal shape: (712, 35), (712, 69)
+Normal Signals count- 4975
+Abnormal Signals count- 712
+6Hz Signals shape - (5687, 35)
+12Hz Signals shape - (5687, 69)
+Labels - (5687,)
+Train Set Size: 3467
+Val Set Size: 754
+Test Set Size: 754
+cpu
+ConvNet2D(
+  (layer1): Conv2d(1, 5, kernel_size=(5, 1), stride=(1, 1))
+  (layer2): Conv2d(5, 5, kernel_size=(5, 1), stride=(1, 1))
+  (layer3): Linear(in_features=305, out_features=1, bias=True)
+)
+Model Params: 466
+Epoch - 0, train loss - 726.30588, Train RMSE - 8.72822, Train MAE - 7.08196, Val RMSE - 9.15589, Val MAE - 7.17121
+Epoch - 100, train loss - 19.50201, Train RMSE - 4.77809, Train MAE - 3.63051, Val RMSE - 5.22392, Val MAE - 3.81261
+Epoch - 200, train loss - 32.20225, Train RMSE - 6.08435, Train MAE - 4.44259, Val RMSE - 7.06055, Val MAE - 5.04370
+Epoch - 300, train loss - 25.94352, Train RMSE - 4.80058, Train MAE - 3.55033, Val RMSE - 5.51875, Val MAE - 3.93059
+Epoch - 400, train loss - 23.66461, Train RMSE - 4.85991, Train MAE - 3.35869, Val RMSE - 5.64397, Val MAE - 3.84711
+Epoch - 500, train loss - 26.07348, Train RMSE - 4.70626, Train MAE - 3.40680, Val RMSE - 5.13103, Val MAE - 3.66617
+Epoch - 600, train loss - 24.70222, Train RMSE - 5.21600, Train MAE - 3.95897, Val RMSE - 5.66144, Val MAE - 4.18948
+Epoch - 700, train loss - 19.66109, Train RMSE - 4.52504, Train MAE - 3.17780, Val RMSE - 5.20639, Val MAE - 3.48722
+Epoch - 800, train loss - 23.51706, Train RMSE - 5.89492, Train MAE - 4.96465, Val RMSE - 6.43250, Val MAE - 5.16519
+Epoch - 900, train loss - 20.55029, Train RMSE - 4.59607, Train MAE - 3.51567, Val RMSE - 5.22926, Val MAE - 3.79719
+Epoch - 1000, train loss - 50.49370, Train RMSE - 6.85219, Train MAE - 4.77378, Val RMSE - 8.88231, Val MAE - 5.98421
+Epoch - 1100, train loss - 26.27905, Train RMSE - 4.78978, Train MAE - 3.34327, Val RMSE - 5.78823, Val MAE - 3.90978
+Epoch - 1200, train loss - 20.60572, Train RMSE - 4.53792, Train MAE - 3.43910, Val RMSE - 5.26580, Val MAE - 3.80314
+Epoch - 1300, train loss - 19.63453, Train RMSE - 4.17013, Train MAE - 2.98949, Val RMSE - 4.97817, Val MAE - 3.51598
+Epoch - 1400, train loss - 19.56171, Train RMSE - 4.16598, Train MAE - 2.98209, Val RMSE - 5.11496, Val MAE - 3.55874
+Epoch - 1500, train loss - 20.58133, Train RMSE - 4.25473, Train MAE - 3.08463, Val RMSE - 5.02178, Val MAE - 3.51317
+Epoch - 1600, train loss - 18.34073, Train RMSE - 4.03686, Train MAE - 2.82007, Val RMSE - 4.88116, Val MAE - 3.36380
+Epoch - 1700, train loss - 19.42861, Train RMSE - 4.56611, Train MAE - 3.62725, Val RMSE - 5.23426, Val MAE - 4.04329
+Epoch - 1800, train loss - 18.78176, Train RMSE - 4.38954, Train MAE - 3.06794, Val RMSE - 5.13375, Val MAE - 3.50895
+Epoch - 1900, train loss - 18.56338, Train RMSE - 4.17065, Train MAE - 3.02135, Val RMSE - 4.84885, Val MAE - 3.33557
+Saving Model to models/regressor/2022-07-19-10:22:09
+Best Epoch: 1970, RMSE: 4.647368620748971 MAE: 2.885996460914612
+Test Accuracy (Best val acc model): rmse - 4.817373013210943, mae - 3.282310962677002
