@@ -43,6 +43,9 @@ class AnnUpsampler:
         self.loss_func = torch.nn.MSELoss()
         self.ann_upsampler = NeuralNetwork(input_signal.shape[1], output_signal.shape[1], config["layer_sizes"]).to(self.device)
         print(self.ann_upsampler)
+        model_total_params = sum(p.numel() for p in self.ann_upsampler.parameters() if p.requires_grad)
+        print(model_total_params)
+        
         self.optimizer = optim.SGD(self.ann_upsampler.parameters(), lr=config["lr"], weight_decay=config["weight_decay"])
         self.epochs = config["epochs"]
         self.save_path = config["save_path"]
@@ -121,7 +124,7 @@ class AnnUpsampler:
         input_signals = pd.read_csv(csv_path, header=None).transpose().to_numpy()        
         output_signals = model(torch.from_numpy(input_signals).float()).detach().numpy()
         output_signals_df = pd.DataFrame(output_signals.T)
-        output_signals_df.to_csv("data/12hznormal_reconstructed.csv", index=False, header=None)
+        # output_signals_df.to_csv("data/12hznormal_reconstructed.csv", index=False, header=None)
         
         
 if __name__ == "__main__":
@@ -133,4 +136,4 @@ if __name__ == "__main__":
     trainer.train()
     # trainer.test()
     # trainer.upsample_and_save(torch.load("/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-06-12-19:54:42/upsampler_2022-06-12-19:54:42.pt"))
-    # trainer.inference_on_csv(torch.load("/Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler/2022-06-22-09:28:16/upsampler_2022-06-22-09:28:16.pt"), '/Users/ganesh/UofA/SNN/freq_data/6Hz_normal.xlsx')
+    # trainer.inference_on_csv(torch.load("models/upsampler/2022-07-10-21:40:37/upsampler_2022-07-10-21:40:37.pt"), '/Users/ganesh/UofA/SNN/freq_data_final_corrected/6Hz_normal.csv')

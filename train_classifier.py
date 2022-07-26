@@ -69,10 +69,10 @@ class AnomalyClassifier:
             self.loss_func = torch.nn.BCELoss(pos_weight=torch.tensor(np.sum(self.train_labels==0)/np.sum(self.train_labels==1)))
         else:
             self.loss_func = torch.nn.BCELoss()
-        if config["conv2d"]:
+        if config["conv1d"]:
             self.classifier = classifier_circular.CirConvNetClassifier()
         else:
-            self.classifier = classifier_circular.fcn_classifier(69, 1, [20])
+            self.classifier = classifier_circular.FCNClassifier(69, 1, [8, 8])
         print(self.classifier)
         self.classifier = self.classifier.to(self.device)        
         # Register hook
@@ -171,11 +171,6 @@ class AnomalyClassifier:
         print(f"Validation best Epoch: {best_epoch}, Acc: {best_val_acc}, F1: {best_val_f1}")
         total, abnrmal, nrmal, f1 = self.accuracy(self.test_loader, best_model, show_confusion=True, save_confusion_path=cnf_matrix_path, loader_labels=self.test_labels)
         print(f"Test Set - Accuracy: {total}, Abnormal: {abnrmal}, Normal: {nrmal}, F1: {f1}")
-        # fig, axs = plt.subplots(3, 1, sharex=True, constrained_layout=True)
-        # axs[0].plot(np.arange(69), self.test_set[0][0])
-
-        # axs[1].plot(activations["input"][0][0])
-        # # axs[2].imshow(torch.relu(activations["output"][0][0].permute(1,0)))
         plt.show()
 
 if __name__ == "__main__":

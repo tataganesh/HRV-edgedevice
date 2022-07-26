@@ -72,6 +72,8 @@ class HrvRegressor:
             self.regressor = regressor_circular.HRNet(2, 8, 69, 1).to(self.device)
         elif config["network_type"] == "conv1D":
             self.regressor = regressor_circular.CirConvNet().to(self.device)
+        elif config["network_type"] ==  "conv2D":
+            self.regressor = regressor_circular.ConvNet2D().to(self.device)
         
         print(self.regressor)
         pytorch_total_params = sum(p.numel() for p in self.regressor.parameters() if p.requires_grad)
@@ -153,7 +155,8 @@ class HrvRegressor:
             input_signals = upsampler(torch.from_numpy(input_signals).float()).detach().numpy()
         output_signals = model(torch.from_numpy(input_signals).float()).detach().numpy()
         output_signals_df = pd.DataFrame(output_signals)
-        output_signals_df.to_csv("data/hrv_inferenced_reconstructed_1.csv", index=False, header=None)
+        torch.save(model.state_dict(), "regressor.pt")
+        # output_signals_df.to_csv("data/hrv_inferenced_reconstructed_1.csv", index=False, header=None)
     
         
 if __name__ == "__main__":
