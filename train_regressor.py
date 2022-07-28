@@ -17,7 +17,6 @@ import os
 from torch.utils.data import random_split, DataLoader
 import shutil
 today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
-from torchinfo import summary
 import copy
 import math
 import matplotlib.pyplot as plt

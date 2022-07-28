@@ -19,7 +19,6 @@ from networks import classifier_circular
 import copy
 today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
 import torch.nn.functional as F
-from torchinfo import summary
 import shutil
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
