@@ -1,15 +1,7 @@
-# HRV-edgedevice
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1zfv7Uj2l-QWJ9dpxFHZ4ikUdu0U3v5aT?usp=sharing)
+## Heart Rate Regression on Edge Device using an interpretable ML pipeline
 
-DNN-based system to calculate HRV using low frequency input signal
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1OWFeLAJzZpgFkYPsbASofC8oFJX99gzs?usp=sharing)
+
+Code for the paper "Tiny-HR: An interpretable machine learning pipeline for heart rate on low power edge devices".
 
 
-## Running scripts
-
-Upsampler
-
-```python3 upsampler.py --config=config.json```
-
-Classifier
-
-```python3 classifier.py --folder_path /Users/ganesh/UofA/SNN/freq_data --upsampler /Users/ganesh/UofA/SNN/HRV-edgedevice/models/upsampler_2022-03-29-18:31:55.pt ```
